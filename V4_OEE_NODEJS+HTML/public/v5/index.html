@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Interface OEE</title>
+  <script defer src="script.js"></script> 
+  <!--Importando o script.js
+  o Defer faz com que o script seja carregado após o HTML
+  o type="module" permite usar import/export no script.js,
+   porém com mantem o defer.  
+  -->
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+    
+  <center>
+    <span>
+      <p id="hora_atual_setup">Hora Atual...</p>
+      <h1>Sistema de Controle de OEE - CIN</h1>
+    </span>
+  </center>
+  <div>
+    <h2>Setup</h2>
+    <button onclick="enviarComando('of')">OF</button>
+    <button onclick="enviarComando('setq')">SETQ</button>
+    <button onclick="regista_cadencia('cadencia')">CADENCIA</button>
+    <button id="tempo_estimado_setup">Tempo estimado de Setup</button>
+    <input type="time" id="tempo_estimado_setup_input" style="display:flex;">
+    <button onclick="enviarComando('start')">Iniciar Trabalho</button>
+    <button onclick="enviarComando('pause')" id="pause">PAUSE</button>
+    <button onclick="enviarComando('cancel')">CANCEL</button>
+    <button id="finalizar_setup">Finalizar Setup</button>
+  </div>
+
+  <div>
+
+    <pre id="hora_inicial">Hora Inicial Setup: </pre>
+    <pre id="hora_final">Hora Final Setup: </pre>
+    <pre id="duracao_min_setup">Duração (min): </pre>
+    <pre id="tempo_estimado_setup_text">Tempo estimado de Setup</pre>
+    <pre id="tempo_de_pausa">Tempo de pausa</pre>
+    <pre id="kpi_parcial_setup">KPI Setup</pre>
+
+  </div>
+  <h2>Produção</h2>
+  <div>
+    <button onclick="enviarComando_producao('start')">Iniciar Trabalho</button>
+    <button onclick="enviarComando_producao('pause')">PAUSE</button>
+    <button onclick="enviarComando_producao('cancel')">CANCEL</button>    
+    <button id="btnFinalizar" onclick="finalizarProducao()">Finalizar / Gravar</button>
+  </div>
+  <div>
+    <pre id="hora_inicial_producao">Hora Inicial</pre>
+    <pre id="hora_final_producao">Hora Final</pre>
+    <pre id="duracao_segundos_producao">Duração em Segundos</pre>
+    <pre id="total">Quantidade total a produzir...</pre>
+    <pre id="producao">Produção...</pre>
+    <pre id="desperdicio">Produção...</pre>
+  </div>
+
+
+  <pre id="dados">Esperando dados...</pre>
+  <div>
+    <h2>Dados Recebidos</h2>
+    <pre id="of">Ordem de Fabrico...</pre>
+    <pre id="total">Quantidade total a produzir...</pre>
+    <pre id="entrada">Entrada...</pre>
+    <pre id="saida">Saida...</pre>
+    <pre id="producao">Produção...</pre>
+    <pre id="desperdicio">Produção...</pre>
+    <pre id="ativo">Ativo ...</pre>
+
+    <h3>Status da Máquina</h3>
+    <pre id="m_producao">Maquina em Produção...</pre>
+    <pre id="m_erro">Maquina em Erro...</pre>
+    <pre id="m_normal">Maquina Normal...</pre>
+    <pre id="m_ligada">Maquina Ligada ...</pre>
+
+    <!--
+  <pre id="status">Status...</pre>
+  <pre id="lastUpdate">Última Atualização...</pre>  
+  
+    -->
+
+
+  </div>
+
+</body>
+
+</html>

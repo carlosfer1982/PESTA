@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Interface OEE</title>
+  <script defer src="script.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <button id="mostrarFormularioBtn">Setup</button>
+    <form id="form_setup" style="display: none;">
+      <br><br>
+      <label for="of_text">Ordem de Fabrico:</label>
+      <input type="text" id="of_form" name="of_form" placeholder="OF2025-1"><br><br>
+
+      <label for="setq_text">Quantidade a produzir:</label>
+      <input type="text" id="setq_form" name="setq_form" placeholder="10"><br><br>
+
+      <label for="setq_text">Cadência:</label>
+      <input type="text" id="setq_form" name="setq_form" placeholder="50"><br><br>
+
+
+
+      <button>Iniciar Setup</button>
+      <input type="submit" value="Finalizar Setup">
+
+    </form>
+  </div>
+  <h1>Debug - Dashboard OEE</h1>
+  <div>
+    <button onclick="enviarComando('of')">OF</button>
+    <button onclick="enviarComando('setq')">SETQ</button>
+    <button onclick="regista_cadencia('cadencia')">CADENCIA</button>
+    <button onclick="enviarComando('start')">Iniciar Trabalho</button>
+    <button onclick="enviarComando('pause')">PAUSE</button>
+    <button onclick="enviarComando('cancel')">CANCEL</button>
+    <button id="btnFinalizar" onclick="finalizarProducao()">Finalizar / Gravar</button>
+  </div>
+
+  <div>
+    <pre id="hora_atual">Hora Atual...</pre>
+    <pre id="hora_inicial">Hora Inicial</pre>
+    <pre id="hora_final">Hora Final</pre>
+    <pre id="duracao_segundos">Duração em Segundos</pre>
+  </div>
+  <h2>Dados Recebidos no servidor</h2>
+  <pre id="dados">Esperando dados...</pre>
+  <div>
+    <h2>Dados Recebidos</h2>
+    <pre id="of">Ordem de Fabrico...</pre>
+    <pre id="total">Quantidade total a produzir...</pre>
+    <pre id="entrada">Entrada...</pre>
+    <pre id="saida">Saida...</pre>
+    <pre id="producao">Produção...</pre>
+    <pre id="desperdicio">Produção...</pre>
+    <pre id="ativo">Ativo ...</pre>
+
+    <h3>Status da Máquina</h3>
+    <pre id="m_producao">Maquina em Produção...</pre>
+    <pre id="m_erro">Maquina em Erro...</pre>
+    <pre id="m_normal">Maquina Normal...</pre>
+    <pre id="m_ligada">Maquina Ligada ...</pre>
+
+    <!--
+  <pre id="status">Status...</pre>
+  <pre id="lastUpdate">Última Atualização...</pre>  
+  
+    -->
+
+
+  </div>
+
+</body>
+
+</html>

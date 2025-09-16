@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIN - Production Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="logo_cin.png" alt="CIN Logo" class="logo-cin-header">
+            <span class="logo-text">CIN | Dashboard</span>
+        </div>
+        <div class="data-hora"></div>
+        <div class="header-icons"></div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li class="active">
+                        <span class="icon"></span>
+                        <a href="#">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <span class="icon"></span>
+                        <a href="#">CONFIGURAÇÃO</a>
+                    </li>
+                    <li>
+                        <span class="icon"></span>
+                        <a href="#">PROGRAMAÇÃO</a>
+                    </li>
+                    <li>
+                        <span class="icon"></span>
+                        <a href="#">LOG</a>
+                    </li>
+                    <li>
+                        <span class="icon"></span>
+                        <a href="#">ATUALIZAR</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="dashboard-content" id="dashboard-content">
+            <section class="info-geral">
+                <div class="info-card">
+                    <span class="label">Fábrica e Linha</span>
+                    <span class="value" id="info-linha"></span>
+                </div>
+                <div class="info-card status-producao">
+                    <span class="label">Estado</span>
+                    <span class="value" id="info-estado"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Produto</span>
+                    <span class="value" id="info-produto"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Ordem de produção</span>
+                    <span class="value" id="info-ordem"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Turno</span>
+                    <span class="value" id="info-turno"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Equipe</span>
+                    <span class="value" id="info-equipe"></span>
+                </div>
+            </section>
+
+            <section class="oee-section">
+                <div class="oee-card"><div class="label">OEE</div><div class="value-container"><span class="value" id="oee-valor">0</span><span class="unidade">%</span></div></div>
+                <div class="oee-card"><div class="label">Desempenho</div><div class="value-container"><span class="value" id="oee-desempenho">0</span><span class="unidade">%</span></div></div>
+                <div class="oee-card"><div class="label">Disponibilidade</div><div class="value-container"><span class="value" id="oee-disponibilidade">0</span><span class="unidade">%</span></div></div>
+                <div class="oee-card"><div class="label">Qualidade</div><div class="value-container"><span class="value" id="oee-qualidade">0</span><span class="unidade">%</span></div></div>
+            </section>
+
+            <section class="kpi-section">
+                <div class="kpi-card"><div class="label">KPI</div><div class="value-container"><span class="value" id="kpi-cadencia"></span></div></div>
+                <div class="kpi-card"><div class="label">Cadência média</div><div class="value-container"><span class="value" id="kpi-cadencia-media"></span></div></div>
+                <div class="kpi-card"><div class="label">Unidades produzidas</div><div class="value-container"><span class="value" id="kpi-unidades-produzidas"></span></div></div>
+                <div class="kpi-card"><div class="label">Objetivo atual</div><div class="value-container"><span class="value" id="kpi-objetivo-atual"></span></div></div>
+            </section>
+        </main>
+    </div>
+
+    <div class="action-buttons-dashboard" id="action-buttons-dashboard">
+        <button id="btn-trocar-equipe" class="btn btn-primary">
+            <span class="icon"></span>TROCAR EQUIPE
+        </button>
+        <button id="btn-suspender" class="btn btn-secondary">
+            <span class="icon"></span>SUSPENDER PRODUÇÃO
+        </button>
+        <button id="btn-terminar" class="btn btn-danger">
+            <span class="icon"></span>TERMINAR PRODUÇÃO
+        </button>
+    </div>
+
+    <div id="modal-iniciar-producao" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Iniciar produção</h2>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ordem-producao">Ordem de produção</label>
+                        <input type="text" id="ordem-producao" value="" placeholder="13451">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="nome-produto">Id do produto</label>
+                        <input type="text" id="nome-produto" placeholder="Id do produto">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cadencia-input">Cadência</label>
+                        <select id="cadencia-input">
+                            <option value="automatico">Automático</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="objetivo-input">Objetivo</label>
+                        <input type="text" id="objetivo-input" placeholder="Objetivo">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar" class="btn btn-secondary">CANCELAR</button>
+                <button id="btn-iniciar" class="btn btn-primary">INICIAR</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-buttons-modal" id="action-buttons-modal">
+        <button class="btn btn-secondary">
+            <span class="icon"></span>INICIAR PREPARAÇÃO
+        </button>
+        <button id="btn-abrir-modal" class="btn btn-primary">
+            <span class="icon"></span>INICIAR PRODUÇÃO
+        </button>
+        <button class="btn btn-secondary">
+            <span class="icon"></span>INICIAR MANUTENÇÃO
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

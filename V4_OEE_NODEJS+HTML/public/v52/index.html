@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Interface OEE</title>
+  <script type="module" src="script.js"></script>
+  <!--Importando o script.js
+  o Defer faz com que o script seja carregado após o HTML
+  o type="module" permite usar import/export no script.js,
+   porém com mantem o defer.  
+  -->
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <center>
+    <span>
+      <p id="hora_atual_setup">Hora Atual...</p>
+      <h1>Sistema de Controlo de OEE - CIN</h1>
+    </span>
+  </center>
+  <div>
+    <h2>Setup</h2>
+    <button id="btn_of">OF</button>
+    <button id="btn_setq">SETQ</button>
+    <button id="btn_cadencia">CADENCIA</button>
+    <button id="tempo_estimado_setup">Tempo estimado de Setup</button>
+    <input type="time" id="tempo_estimado_setup_input" style="display:none;">
+    <button id="btn_start">Iniciar Trabalho</button>
+    <button id="pause">PAUSE</button>
+    <button id="btn_cancel">CANCEL</button>
+    <button id="finalizar_setup">Finalizar Setup</button>
+  </div>
+
+  <div>
+
+    <pre id="hora_inicial">Hora Inicial Setup: </pre>
+    <pre id="hora_final">Hora Final Setup: </pre>
+    <pre id="duracao_min_setup">Duração (min): </pre>
+    <pre id="tempo_estimado_setup_text">Tempo estimado de Setup</pre>
+    <pre id="tempo_de_pausa">Tempo de pausa</pre>
+
+  </div>
+  <h2>Produção</h2>
+  <div>
+    <button id="btn_start_producao">Iniciar Trabalho</button>
+    <button id="btn_pause_producao">PAUSE</button>
+    <button id="btn_cancel_producao">CANCEL</button>
+    <button id="btnFinalizar">Finalizar / Registar</button>
+  </div>
+  <div>
+    <pre id="hora_inicial_producao">Hora Inicial</pre>
+    <pre id="duracao_estimada_producao">Duração Estimada / minuto</pre>
+    <pre id="hora_final_producao">Hora Final</pre>
+    <pre id="duracao_segundos_producao">Duração em Segundos</pre>
+    <pre id="of">Ordem de Fabrico...</pre>
+    <pre id="total">Quantidade total a produzir...</pre>
+    <pre id="entrada">Entrada...</pre>
+    <pre id="saida">Saida...</pre>
+    <pre id="producao">Produção...</pre>
+    <pre id="desperdicio">Produção...</pre>
+    <pre id="ativo">Ativo ...</pre>
+  </div>
+  <div>
+    <pre id="kpi_parcial_qualidade">KPI - Qualidade</pre>
+  </div>
+
+
+  <pre id="dados">Esperando dados...</pre>
+  <div>
+    <h2>Status do Equipamento</h2>
+
+    <pre id="m_producao">Maquina em Produção...</pre>
+    <pre id="m_erro">Maquina em Erro...</pre>
+    <pre id="m_normal">Maquina Normal...</pre>
+    <pre id="m_ligada">Maquina Ligada ...</pre>
+
+    <!--
+  <pre id="status">Status...</pre>
+  <pre id="lastUpdate">Última Atualização...</pre>  
+  
+    -->
+
+
+  </div>
+
+</body>
+
+</html>

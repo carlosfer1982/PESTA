@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo Fetch API</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .post { border: 1px solid #eee; margin-bottom: 10px; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .post h2 { margin-top: 0; font-size: 1.2em; }
+        .button-container { margin-bottom: 20px; display: flex; gap: 10px; }
+        .button-container button {
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .get-button { background-color: #4CAF50; color: white; }
+        .get-button:hover { background-color: #45a049; }
+        .post-button { background-color: #008CBA; color: white; }
+        .post-button:hover { background-color: #007bb5; }
+    </style>
+</head>
+<body>
+    <h1>Posts da API</h1>
+    <div class="button-container">
+        <button class="get-button" onclick="getPosts()">Carregar Posts</button>
+        <button class="post-button" onclick="createPost()">Criar Novo Post</button>
+    </div>
+    <div id="posts-container"></div>
+
+    <script>
+        // Seleciona o elemento do DOM onde os posts serão exibidos
+        const postsContainer = document.getElementById('posts-container');
+        // Define a URL da API de exemplo para as requisições
+        //const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+        //const apiUrl = 'http://localhost:3000/api/micro/data';
+        //const apiUrl = 'http://localhost:3001/';
+        //const apiUrl = 'http://localhost:3001/api/products';
+
+
+        /**
+         * Realiza uma requisição GET para a API para buscar e exibir os posts.
+         * Esta função é chamada pelo botão "Carregar Posts".
+         */
+        async function getPosts() {
+            // Limpa o conteúdo atual do container de posts para evitar duplicatas
+            postsContainer.innerHTML = 'Carregando posts...';
+
+            try {
+                // Faz a requisição GET
+                const response = await fetch(apiUrl);
+                
+                // Verifica se a resposta HTTP foi bem-sucedida
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! Status: ${response.status}`);
+                }
+                
+                // Converte a resposta para JSON
+                const data = await response.json();
+
+                // Limpa o container antes de adicionar os novos posts
+                postsContainer.innerHTML = data;
+                
+                /*
+                // Itera sobre os dados e exibe cada post no HTML
+                data.forEach(post => {
+                    const postElement = `
+                        <div class="post">
+                            <h2>${post.title}</h2>
+                            <p>${post.body}</p>
+                        </div>
+                    `;
+                    postsContainer.innerHTML += postElement;
+                });
+                */
+
+            } catch (error) {
+                // Captura e exibe qualquer erro que ocorra
+                console.error('Erro ao buscar dados:', error);
+                postsContainer.innerHTML = '<p>Não foi possível carregar os posts.</p>';
+            }
+        }
+
+        /**
+         * Realiza uma requisição POST para a API para criar um novo post.
+         * Esta função é chamada pelo botão "Criar Novo Post".
+         */
+        async function createPost() {
+            // Define o objeto com os dados do novo post
+            const newPost = {
+                title: 'Título do novo post',
+                body: 'Este é o conteúdo do novo post criado via fetch API e POST.',
+                userId: 1,
+            };
+
+            try {
+                // Faz a requisição POST com o corpo e headers corretos
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newPost),
+                });
+
+                // Verifica se a resposta foi bem-sucedida
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! Status: ${response.status}`);
+                }
+
+                // Converte a resposta do servidor para JSON (geralmente inclui o post criado com um ID)
+                const createdPost = await response.json();
+
+                // Exibe uma mensagem no console e na tela confirmando a criação
+                console.log('Post criado com sucesso:', createdPost);
+                
+                // Adiciona o novo post à lista na interface para mostrar que a operação foi bem-sucedida
+                const postElement = `
+                    <div class="post" style="background-color: #e0f7fa;">
+                        <h2>Novo Post Criado: ${createdPost.title}</h2>
+                        <p>${createdPost.body}</p>
+                        <small>ID: ${createdPost.id}</small>
+                    </div>
+                `;
+                postsContainer.innerHTML += postElement;
+
+            } catch (error) {
+                // Captura e exibe qualquer erro que ocorra
+                console.error('Erro ao criar post:', error);
+                alert('Erro ao tentar criar o post. Verifique o console.');
+            }
+        }
+
+    </script>
+</body>
+</html>
