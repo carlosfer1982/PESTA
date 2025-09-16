@@ -4,6 +4,9 @@
 
 #include <stdint.h>
 
+// Estrutura de dados criada para conter os dados de produção. Durante o desenvolvimento, antes de decidir utilizar o cJSON
+// Contudo, esta ficou interligada ao objeto JSON.
+
 typedef struct {
 	char ordem_fabrico[16];
 	uint16_t quantidade_total;
@@ -16,8 +19,8 @@ typedef struct {
 
 extern DadosProducao dados;
 
-void enviar_dados_para_pc(void);
+void enviar_dados_para_pc(void); // Função anterior utilizada paar enviar dados para o PC
 
-void enviar_dados_para_pc_json(void);
+void enviar_dados_para_pc_json(void); // Função utilizada atualmente, utilizando a biblioteca cJSON
 
 #endif

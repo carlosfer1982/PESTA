@@ -1,12 +1,14 @@
 #include <avr/io.h>
 #include "saidas.h"
 
+// Define portos como saídas.
 void SAIDAS_init(void)
 {
     DDRD |= (1 << PD2) | (1 << PD3) | (1 << PD5) | (1 << PD6);
     DDRC |= (1 << PC4) | (1 << PC5);
 }
 
+// Define funções para ativar as saídas. Basta enviar o parâmetro do estado desejado 1 ou 0 para ligar, ou desligar uma saída.
 void set_autorizacao(uint8_t estado)       { if (estado) PORTD |= (1 << PD2); else PORTD &= ~(1 << PD2); }
 void set_led_avaria(uint8_t estado)        { if (estado) PORTD |= (1 << PD3); else PORTD &= ~(1 << PD3); }
 void set_led_warning(uint8_t estado)       { if (estado) PORTD |= (1 << PD5); else PORTD &= ~(1 << PD5); }
