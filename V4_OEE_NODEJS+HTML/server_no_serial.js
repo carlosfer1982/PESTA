@@ -1,10 +1,14 @@
-// server.js
+// server.js sem necessidade de serialport
 
 const express = require('express'); // Importa a biblioteca express para criar servidores API
 const cors = require('cors');       // Importa a biblioteca CORS
 const { SerialPort } = require('serialport'); // Importa a biblioteca para ler a porta serial
 const { ReadlineParser } = require('@serialport/parser-readline');  // Importa o módulo de parsing por linha
 const path = require('path');   // Importa a biblioteca que funcionar como interface para o endereço físico da porta (COM7)
+
+const { MockBinding } = require('@serialport/binding-mock') // Importa a biblioteca de simulação de porta serial
+MockBinding.createPort('Mock_COM7', { echo: true, record: true }) // Cria uma porta serial simulada para testes
+
 
 const app = express();  // Cria uma instância do Express - Servidor API
 // Configurações do servidor
@@ -76,25 +80,48 @@ async function run() {
 
 // Configuração da porta serial
 const serial = new SerialPort({
-  path: 'COM7',         //  Inserir neste path a porta correta onde o microcontrolador está conectado)
-  baudRate: 38400    // Velocidade de comunicação (deve ser a mesma configurada no microcontrolador)
+  path: 'Mock_COM7',         //  Inserir neste path a porta correta onde o microcontrolador está conectado)
+  baudRate: 38400,    // Velocidade de comunicação (deve ser a mesma configurada no microcontrolador)
+  binding: MockBinding // Usa a porta serial simulada para testes
 });
 
 const parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' })); // Configura o parser para ler dados linha a linha, considerando '\r\n' como final de linha  
 
-
-let lastData = {}; // cria uma variável vazia para armazenar o último dado recebido do microcontrolador
+// cria uma variável vazia para armazenar o último dado recebido do microcontrolador
+let lastData = {
+              "of":"TESTE_MOCK",
+              "setq":10,
+              "cmd":"start",
+              "ativo":1,
+              "total":10,
+              "entrada": 12,
+              "saida": 10,
+              "producao":10,
+              "desperdicio":2,
+              "Maquina_em_Producao":1,
+              "Maquina_em_erro":0,
+              "Maquina_em_normal": 1,
+              "Maquina_ligada":1
+              
+              }; 
 
 // Quando receber dados pela porta serial
 parser.on('data', data => {
   try {
+    
     const json = JSON.parse(data); // Espera JSON vindo do microcontrolador
     const timestamp = new Date().toISOString(); // Adiciona um timestamp ao dado recebido
     //run();
+
+
     gravar(); // Chama a função para gravar os dados na base de dados, ou seja, a cada dado recebido, ele é gravado na coleção meusDados
     // A cada segundo ou 2 segundos, de acordo com o envio do microcontrolador, o dado é atualizado
 
+
     lastData = { timestamp, ...json }; // Atualiza o último dado recebido, adicionando o timestamp
+    
+
+
     console.log('📥 Recebido:', lastData);  // Verificação dos dados recebidos no console, já com o timestamp adicionado
     console.log('Dado Recebido da base de dados:' );
 
@@ -141,13 +168,13 @@ app.post('/api/db/producao', async (req, res) => {
     const db = client.db("meuBanco"); // Seleciona a base de dados
     const collection = db.collection("producao"); // Seleciona a coleção producao
 
-
     // Inserindo documento de produção
+    console.log(JSON.stringify(req.body));  // Dados a serem enviados para a coleção produção
     await collection.insertOne(req.body); // Insere o documento recebido no corpo da requisição
-    console.log(req.body);
     console.log("📌 Documento de produção inserido com sucesso!");
     res.json({ status: 'Documento inserido com sucesso' }); // Retorna uma resposta de sucesso
-    lastData = {};  // Limpa o lastData após inserir o documento de produção
+    //lastData = {};  // Limpa o lastData após inserir o documento de produção
+
 
   } catch (err) {
     console.error("Erro:", err);
@@ -170,4 +197,6 @@ app.post('/api/db/producao', async (req, res) => {
 app.listen(port, () => {
   //run();
   console.log(`✅ Servidor rodando em: http://localhost:${port}`);
+  console.log(`Este é um servidor SEM comunicação serial`);
+  console.log(lastData); 
 });

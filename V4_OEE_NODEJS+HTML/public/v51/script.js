@@ -247,10 +247,10 @@ function finalizarProducao(){
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({"cmd":"cancel"})
-  });
+    });
   
   
-  
+  window.location.reload(true); // recarrega a página para reiniciar o processo
   
   } else {
     return;
