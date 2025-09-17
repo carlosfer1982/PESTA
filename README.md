@@ -43,4 +43,11 @@ HTML necessárias (Front-end)
 para correr o servidor sem o microcontrolador: 
 npm run dev_no_serial 
 ou
-node dev_no_serial.js
+node dev_no_serial.js <br>
+<br>
+
+No navegador, digitar: http://localhost:3000/v51 - versão do vídeo
+
+
+
+
