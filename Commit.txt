@@ -1,0 +1,8 @@
+
+** Adicionado comentários ao server.js
+** a função run() ficou comentada, pois foi utilizada apenas nos testes iniciais
+** Adição o método na função FinalizarProducao() window.location.reload(true), a fim de fazer o reload da página. 
+arquivos afetados: /v51/script.js
+** Criação de um server_no_serial.js para teste do servidor, sem conexão com a porta.
+-- npm run dev_no_serial
+** Teste de funcionamento do servidor com conexão serial MOCK.
