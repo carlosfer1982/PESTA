@@ -40,3 +40,7 @@ Comando para finalizar uma produção ou cancelar
 
 #V4_OEE_NODEJS+HTML - Contém o servidor que está a correr o Serial PORT, bem como as API´s necessárias (back-end) e páginas 
 HTML necessárias (Front-end)
+para correr o servidor sem o microcontrolador: 
+npm run dev_no_serial 
+ou
+node dev_no_serial.js
