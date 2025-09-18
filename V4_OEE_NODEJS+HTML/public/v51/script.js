@@ -27,7 +27,7 @@ let timeRunning = false;
 var kpi_parcial_qualidade = 0;
 
 
-// Butões
+// Botões
 
 const COMANDOS = {
   'of': "of",
@@ -134,6 +134,8 @@ function postData (payload) {
       });
 }
 
+
+
 function enviarComando(cmd) {
   let payload = { cmd };
   switch(COMANDOS[cmd]) {
@@ -172,7 +174,8 @@ function enviarComando(cmd) {
     pausas,
     pauseTimer
   })
-  postData(payload)
+  postData({'cmd':cmd});
+
 }
 
 
