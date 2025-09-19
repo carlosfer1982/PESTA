@@ -197,14 +197,13 @@ function atualizarDados() {
     const duracao_min_setup = (hora_atual_setup - horaInicio);
     tempo_decorrido_setup = formatarTempo(duracao_min_setup);
     document.getElementById('duracao_min_setup').textContent = `Duração do Setup: ${tempo_decorrido_setup}`;
-
-
-
-
   }
   // Tempo total de pausa
   const duracao_pausa = formatarTempo(tempo_total_pausa * 1000);
   document.getElementById('tempo_de_pausa').textContent = `Tempo de Pausa: ${duracao_pausa} segundos`;
+
+  // Atualiza tempo de produção
+
 
 }
 
@@ -259,7 +258,7 @@ function enviarComando(cmd) {
     pausas,
     pauseTimer
   })
-  postData({ 'cmd': cmd });
+  postData(payload);
 
 }
 
@@ -300,12 +299,14 @@ function regista_cadencia(cmd) {
 
 
 
+
 function finalizarProducao() {
   if (confirm("Confirma que pretende finalizar a produção e gravar os dados na base de dados?") == true) {
 
     const horaFim = new Date();
     const duracaoMs = ((horaFim - horaInicio_producao));
     const duracaoSeg = duracaoMs / 1000;
+
     const duracaoMin = duracaoSeg / 60; // converte para minutos
 
     // Dados adicionais para calculo do OEE

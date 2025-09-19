@@ -174,7 +174,7 @@ function enviarComando(cmd) {
     pausas,
     pauseTimer
   })
-  postData({'cmd':cmd});
+  postData(payload);
 
 }
 

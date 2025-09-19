@@ -89,7 +89,7 @@ let lastData = {}; // cria uma variável vazia para armazenar o último dado rec
 parser.on('data', data => {
   try {
     const json = JSON.parse(data); // Espera JSON vindo do microcontrolador
-    const timestamp = new Date().toISOString(); // Adiciona um timestamp ao dado recebido
+    const timestamp = new Date().toLocaleString(); // Adiciona um timestamp ao dado recebido
     //run();
     gravar(); // Chama a função para gravar os dados na base de dados, ou seja, a cada dado recebido, ele é gravado na coleção meusDados
     // A cada segundo ou 2 segundos, de acordo com o envio do microcontrolador, o dado é atualizado
