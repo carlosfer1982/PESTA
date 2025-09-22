@@ -21,6 +21,28 @@
         .get-button:hover { background-color: #45a049; }
         .post-button { background-color: #008CBA; color: white; }
         .post-button:hover { background-color: #007bb5; }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            
+        }
+
+        button {
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
     </style>
 </head>
 
@@ -37,19 +59,30 @@
     </header>
 
     <dialog id="preparacao">
-        <label for="of">Ordem de Fabrico</label>
-        <input type="text" id="of" placeholder="OF2025">
-        
-        <label for="setq">Quantidade total</label>
-        <input type="text" id="setq" placeholder="100">
-        
-        <label for="cadencia">Cadência</label>
-        <input type="text" id="cadencia" placeholder="15">
+        <h2>Preparação</h2>
 
-        <label for="tempo_estimado_setup">Tempo Estimado de Setup</label>
-        <input type="text" id="tempo_estimado_setup" placeholder="10">
+        <form method="dialog">
+            <label for="of">Ordem de Fabrico</label>
+            <input type="text" id="of" placeholder="OF2025">
+            
+            
+            <label for="setq">Quantidade total</label>
+            <input type="text" id="setq" placeholder="100">
+            
+            
+            <label for="cadencia">Cadência</label>
+            <input type="text" id="cadencia" placeholder="15">
+            
 
-        <button onclick="fecha_modal('preparacao')">Fechar</button>
+            <label for="tempo_estimado_setup">Tempo Estimado de Setup</label>
+            <input type="text" id="tempo_estimado_setup" placeholder="10">
+            
+            <div class="buttons">
+                <button value="cancel" type="reset">Cancelar</button>
+                <button value="default" type="submit">Salvar</button>
+                <button onclick="fecha_modal('preparacao')">Fechar</button>
+            </div>
+        </form>
 
     </dialog>
 
