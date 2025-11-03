@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIN - Production Dashboard</title>
+    <script type="module" defer src="script.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
+    <!--     CABEÇALHO DA PÁGINA      -->
     <header class="dashboard-header">
         <div class="logo">
             <img src="logo_cin.png" alt="CIN Logo" class="logo-cin-header">
@@ -17,6 +21,7 @@
         <div class="header-icons"></div>
     </header>
 
+    <!--      CONTEÚDO DO CONTAINER PRINCIPAL DO OEE  -->
     <div class="main-container">
         <aside class="sidebar">
             <nav>
@@ -56,16 +61,16 @@
                     <span class="value" id="info-estado"></span>
                 </div>
                 <div class="info-card">
-                    <span class="label">Produto</span>
-                    <span class="value" id="info-produto"></span>
+                    <span class="label">Quantidade</span>
+                    <span class="value" id="info-quantidade"></span>
                 </div>
                 <div class="info-card">
-                    <span class="label">Ordem de produção</span>
+                    <span class="label">Ordem de Fabrico</span>
                     <span class="value" id="info-ordem"></span>
                 </div>
                 <div class="info-card">
-                    <span class="label">Turno</span>
-                    <span class="value" id="info-turno"></span>
+                    <span class="label">Cadência</span>
+                    <span class="value" id="info-cadencia"></span>
                 </div>
                 <div class="info-card">
                     <span class="label">Equipe</span>
@@ -73,25 +78,78 @@
                 </div>
             </section>
 
+            <section class="info-geral">
+                <div class="info-card">
+                    <span class="label">Hora de Início:</span>
+                    <span class="value" id="info_hora_inicio"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Tempo estimado de Duração:</span>
+                    <span class="value" id="info_tempo_estimado_duracao"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Duração:</span>
+                    <span class="value" id="info-linha-teste3"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Contagem de Entrada:</span>
+                    <span class="value" id="info-linha-teste4"></span>
+                </div>
+                    <div class="info-card">
+                    <span class="label">Contagem de Saída:</span>
+                    <span class="value" id="info-linha-teste4"></span>
+                </div>
+
+            </section>
+
             <section class="oee-section">
-                <div class="oee-card"><div class="label">OEE</div><div class="value-container"><span class="value" id="oee-valor">0</span><span class="unidade">%</span></div></div>
-                <div class="oee-card"><div class="label">Desempenho</div><div class="value-container"><span class="value" id="oee-desempenho">0</span><span class="unidade">%</span></div></div>
-                <div class="oee-card"><div class="label">Disponibilidade</div><div class="value-container"><span class="value" id="oee-disponibilidade">0</span><span class="unidade">%</span></div></div>
-                <div class="oee-card"><div class="label">Qualidade</div><div class="value-container"><span class="value" id="oee-qualidade">0</span><span class="unidade">%</span></div></div>
+                <div class="oee-card">
+                    <div class="label">OEE</div>
+                    <div class="value-container"><span class="value" id="oee-valor">0</span><span
+                            class="unidade">%</span></div>
+                </div>
+                <div class="oee-card">
+                    <div class="label">Desempenho</div>
+                    <div class="value-container"><span class="value" id="oee-desempenho">0</span><span
+                            class="unidade">%</span></div>
+                </div>
+                <div class="oee-card">
+                    <div class="label">Disponibilidade</div>
+                    <div class="value-container"><span class="value" id="oee-disponibilidade">0</span><span
+                            class="unidade">%</span></div>
+                </div>
+                <div class="oee-card">
+                    <div class="label">Qualidade</div>
+                    <div class="value-container"><span class="value" id="oee-qualidade">0</span><span
+                            class="unidade">%</span></div>
+                </div>
             </section>
 
             <section class="kpi-section">
-                <div class="kpi-card"><div class="label">KPI</div><div class="value-container"><span class="value" id="kpi-cadencia"></span></div></div>
-                <div class="kpi-card"><div class="label">Cadência média</div><div class="value-container"><span class="value" id="kpi-cadencia-media"></span></div></div>
-                <div class="kpi-card"><div class="label">Unidades produzidas</div><div class="value-container"><span class="value" id="kpi-unidades-produzidas"></span></div></div>
-                <div class="kpi-card"><div class="label">Objetivo atual</div><div class="value-container"><span class="value" id="kpi-objetivo-atual"></span></div></div>
+                <div class="kpi-card">
+                    <div class="label">KPI</div>
+                    <div class="value-container"><span class="value" id="kpi-cadencia"></span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Cadência média</div>
+                    <div class="value-container"><span class="value" id="kpi-cadencia-media"></span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Unidades produzidas</div>
+                    <div class="value-container"><span class="value" id="kpi-unidades-produzidas"></span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Objetivo atual</div>
+                    <div class="value-container"><span class="value" id="kpi-objetivo-atual"></span></div>
+                </div>
             </section>
         </main>
     </div>
 
+    <!--     BOTÕES DE AÇÃO  - Trocar Equipe, Suspender Produção, Terminar Produção    -->
     <div class="action-buttons-dashboard" id="action-buttons-dashboard">
         <button id="btn-trocar-equipe" class="btn btn-primary">
-            <span class="icon"></span>TROCAR EQUIPE
+            <span class="icon"></span>ANALISAR PARAGENS
         </button>
         <button id="btn-suspender" class="btn btn-secondary">
             <span class="icon"></span>SUSPENDER PRODUÇÃO
@@ -101,6 +159,91 @@
         </button>
     </div>
 
+    <!--    MODAL PREPARAÇÃO    -->
+    <div id="modal-iniciar-preparacao" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Iniciar preparação</h2>
+            <div class="modal-body">
+                <!--   LINHA 1   -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="equipamento">Equipamento</label>
+                        <select id="lista-equipamento">
+                            <option value="RO-11">RO-11</option>
+                            <option value="RO-12">RO-12</option>
+                        </select>
+                    </div>
+                </div>
+                <!--   LINHA 2   -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ordem-producao">Ordem de Fabrico</label>
+                        <input type="text" id="ordem-fabrico-producao" value="" placeholder="OF2025-001">
+                    </div>
+                </div>
+                <!--   LINHA 3   -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="nome-produto">Quantidade Total a Produzir</label>
+                        <input type="text" id="quantidade-preparacao" placeholder="100">
+                    </div>
+                </div>
+                <!--   LINHA 4   -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cadencia-teorica">Cadência Teórica</label>
+                        <select id="lista-cadencia-teorica">
+                            <option value="2400">Embalagem 14 - 0,25L - com rótulo - sem pastilha - 2400/h</option>
+                            <option value="1800">Embalagem 14 - 0,25L - sem rótulo - com pastilha - 1800/h</option>
+                            <option value="1800">Embalagem 14 - 0,25L - com rótulo - com pastilha - 1800/h</option>
+
+                            <option value="1440">Embalagem 75 - 0,75L - com rótulo - com pastilha - 1440/h</option>
+                            <option value="1440">Embalagem 75 - 0,75L - sem rótulo - com pastilha - 1440/h</option>
+                            <option value="1680">Embalagem 75 - 0,75L - com rótulo - sem pastilha - 1680/h</option>
+
+                            <option value="1680">Embalagem 01 - 1L - com rótulo - sem pastilha - 1680/h</option>
+                            <option value="1470">Embalagem 01 - 1L - sem rótulo - com pastilha - 1470/h</option>
+                            <option value="1470">Embalagem 01 - 1L - com rótulo - com pastilha - 1470/h</option>
+
+                            <option value="960">Embalagem 04 - 4L - com rótulo - com pastilha - 960/h</option>
+                            <option value="1020">Embalagem 04 - 4L - com rótulo - sem pastilha - 1020/h</option>
+                            <option value="960">Embalagem 04 - 4L - sem rótulo - com pastilha - 960/h</option>
+
+                            <option value="960">Embalagem 05 - 5L - com rótulo - com pastilha - 960/h</option>
+                            <option value="960">Embalagem 05 - 5L - com rótulo - sem pastilha - 1020/h</option>
+
+                            <option value="960">Embalagem 50 - 0,5L - com rótulo - com pastilha - 1620/h</option>
+                            <option value="960">Embalagem 50 - 0,5L - com rótulo - sem pastilha - 1620/h</option>
+
+                            <option value="960">Embalagem 2 - 2L - com rótulo - com pastilha - 960/h</option>
+
+                            <option value="960">Embalagem 25 - 0,25L - com rótulo - sem pastilha - 1800/h</option>
+
+
+                        </select>
+                    </div>
+                </div>
+                <!--   LINHA 5   -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teste">Tempo estimado de preparação</label>
+                        <select id="tempo-estimado-preparacao">
+                            <option value="7">Embalagem - 7 minutos</option>
+                            <option value="5">Marca - 5 minutos</option>
+                        </select>
+                    </div>
+                </div>                                      
+            </div>
+            
+            <!--     FOOTER / RODAPÉ  Botões CANCELAR E INICIAR)  -->
+            <div class="modal-footer">
+                <button id="btn-preparacao-cancelar" class="btn btn-secondary">CANCELAR</button>
+                <button id="btn-preparacao-iniciar" class="btn btn-primary">INICIAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!--     MODAL PRODUÇÃO     -->
     <div id="modal-iniciar-producao" class="modal-overlay">
         <div class="modal-content">
             <h2 class="modal-title">Iniciar produção</h2>
@@ -131,18 +274,23 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="modal-footer">
                 <button id="btn-cancelar" class="btn btn-secondary">CANCELAR</button>
                 <button id="btn-iniciar" class="btn btn-primary">INICIAR</button>
             </div>
         </div>
     </div>
-    
+
+
+    <!-- Botões de Ação INICIAR PREPARAÇÃO, PRODUÇÃO E MANUTENÇÃO-->
     <div class="action-buttons-modal" id="action-buttons-modal">
-        <button class="btn btn-secondary">
+        <button id="btn-abrir-modal-preparacao" class="btn btn-primary">
             <span class="icon"></span>INICIAR PREPARAÇÃO
         </button>
-        <button id="btn-abrir-modal" class="btn btn-primary">
+        
+        <button id="btn-abrir-modal" class="btn btn-secondary">
             <span class="icon"></span>INICIAR PRODUÇÃO
         </button>
         <button class="btn btn-secondary">
@@ -150,6 +298,9 @@
         </button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- 
+    <script src="script.js"></script> -->
+
 </body>
+
 </html>

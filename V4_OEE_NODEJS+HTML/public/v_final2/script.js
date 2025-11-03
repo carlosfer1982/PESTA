@@ -1,3 +1,16 @@
+import { atualizarDuracao, formatarTempo } from './myscripts.js';
+import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
+
+let duracao = false;
+let hora_inicio_producao = null;
+let duracao_atual = null;
+
+
+// Variavel global
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Referências aos elementos HTML
@@ -5,31 +18,90 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionButtonsDashboard = document.getElementById('action-buttons-dashboard');
     const actionButtonsModal = document.getElementById('action-buttons-modal');
 
+    // Elementos do Modal Preparação
+    const btnIniciarPreparacao = document.getElementById('btn-preparacao-iniciar');
+    const btnCancelarPreparacao = document.getElementById('btn-preparacao-cancelar');
+
+    const modalIniciarPreparacao = document.getElementById('modal-iniciar-preparacao');
     const modalIniciarProducao = document.getElementById('modal-iniciar-producao');
     const btnAbrirModal = document.getElementById('btn-abrir-modal');
+    const btnAbrirModalPreparacao = document.getElementById('btn-abrir-modal-preparacao');
     const btnCancelar = document.getElementById('btn-cancelar');
     const btnIniciar = document.getElementById('btn-iniciar');
 
-    // Função para atualizar a data e hora no cabeçalho
-    function atualizarDataHora() {
-        const elementoDataHora = document.querySelector('.data-hora');
-        const agora = new Date();
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        const dataHoraFormatada = agora.toLocaleDateString('pt-PT', options).replace(',', '');
-        elementoDataHora.textContent = dataHoraFormatada;
-    }
+    
+
+
+
 
     // Atualiza a data e hora a cada segundo
-    setInterval(atualizarDataHora, 1000);
-    atualizarDataHora();
+    //setInterval(atualizarDataHora, 1000);
+    //atualizarDataHora();
+
+
+    // Loop de 1 segundo
+    // Nesta secção devem estar os códigos que se repetem a cada 1 segundo
+    setInterval(() => {
+        
+        // Atualizada Data e Hora exibida no cabeçalho
+        atualizarDataHora();
+        
+        
+        
+        // Atualização do info-card-duração
+        if(duracao)
+        {            
+            duracao_atual = atualizarDuracao(hora_inicio_producao);
+            document.getElementById('info-linha-teste3').textContent = formatarTempo(duracao_atual);
+        }
+        
+    }, 1000);
+
+
+    // Atualizado Duração
+    // Verifica se a variável dadosProducao.hora_inicial2 existe
+
+
+
+
+
+    // Lógica dos botões do Modal Preparação
+    // Lógica para o botão "Iniciar" do modal de Preparação
+    btnIniciarPreparacao.addEventListener('click', () => {
+        alert('Iniciar botão Modal Preparação - Evento 1 - gestão do modal');
+        modalIniciarPreparacao.style.display = 'none';
+        actionButtonsModal.style.display = 'none';
+        dashboardContent.style.display = 'flex';
+        actionButtonsDashboard.style.display = 'flex';
+
+
+    });
+
+    // Lógica para o botão "Cancelar" do modal de Preparação
+    btnCancelarPreparacao.addEventListener('click', () => {
+        alert('Cancelar botão Modal Preparação');
+        modalIniciarPreparacao.style.display = 'none';
+
+
+    });
 
     // Lógica para mostrar o modal e esconder a dashboard na inicialização
     function mostrarModalInicial() {
-        modalIniciarProducao.style.display = 'flex';
+        modalIniciarPreparacao.style.display = 'none';
         actionButtonsModal.style.display = 'flex';
         dashboardContent.style.display = 'none';
         actionButtonsDashboard.style.display = 'none';
     }
+
+    // Abre o modal quando o botão "Iniciar Preparação" for clicado
+    btnAbrirModalPreparacao.addEventListener('click', () => {
+        modalIniciarPreparacao.style.display = 'flex';
+        //actionButtonsModal.style.display = 'flex';
+        //dashboardContent.style.display = 'none';
+        //actionButtonsDashboard.style.display = 'none';
+        //alert('teste');
+    });
+
 
     // Abre o modal quando o botão "Iniciar Produção" for clicado
     btnAbrirModal.addEventListener('click', () => {
@@ -38,27 +110,32 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardContent.style.display = 'none';
         actionButtonsDashboard.style.display = 'none';
     });
-    
+
     // Lógica para o botão "Cancelar" do modal
     btnCancelar.addEventListener('click', () => {
         modalIniciarProducao.style.display = 'none';
         actionButtonsModal.style.display = 'flex';
         dashboardContent.style.display = 'none';
         actionButtonsDashboard.style.display = 'none';
+        alert('Cancelar botão Modal Produção');
     });
 
     // Lógica para o botão "Iniciar" do modal
-    btnIniciar.addEventListener('click', () => {
+    btnIniciarPreparacao.addEventListener('click', () => {
         // Captura os valores dos campos
-        const ordemProducao = document.getElementById('ordem-producao').value;
-        const nomeProduto = document.getElementById('nome-produto').value;
-        const cadenciaInput = document.getElementById('cadencia-input').value;
-        const objetivoInput = document.getElementById('objetivo-input').value;
+        //alert('Evento 1 - Parte 2 - Gestão funcional');    
+        const equipamento = document.getElementById('lista-equipamento').value;
+        const ordemProducao = document.getElementById('ordem-fabrico-producao').value;
+        const quantidadeProducao = document.getElementById('quantidade-preparacao').value;
+        const cadenciaInput = document.getElementById('lista-cadencia-teorica').value;
+        const objetivoInput = document.getElementById('tempo-estimado-preparacao').value;
+        console.log("Teste de Funcionamento");
 
-        console.log({ ordemProducao, nomeProduto, cadenciaInput, objetivoInput });
-        
+        console.log({ equipamento, ordemProducao, quantidadeProducao, cadenciaInput, objetivoInput });
+
         // Simulação dos dados que seriam buscados de uma API
-        
+
+        /*
         const dadosProducao = {
             linha: "Linha 1",
             estado: "Em produção",
@@ -67,14 +144,47 @@ document.addEventListener('DOMContentLoaded', () => {
             turno: "Diurno",
             equipe: "AO (1 pessoa)"
         };
+        */
+
+        // Dados preenchidos com os valores do modal ou valores padrão
+        const dadosProducao = {
+            linha: equipamento || "RO-11",
+            estado: "Em produção",
+            quantidade: quantidadeProducao || "25",
+            ordem: ordemProducao || "OF2025-1000",
+            turno: cadenciaInput,
+            equipe: "AO (1 pessoa)",
+            hora_inicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            tempo_estimado_duracao: (quantidadeProducao / cadenciaInput) + (Number(objetivoInput) / 60),
+            hora_inicial2: Date.now()
+
+        };
 
         // Preenche a dashboard com os dados do modal
         document.getElementById('info-linha').textContent = dadosProducao.linha;
         document.getElementById('info-estado').textContent = dadosProducao.estado;
-        document.getElementById('info-produto').textContent = dadosProducao.produto;
+        document.getElementById('info-quantidade').textContent = dadosProducao.quantidade;
         document.getElementById('info-ordem').textContent = dadosProducao.ordem;
-        document.getElementById('info-turno').textContent = dadosProducao.turno;
+        document.getElementById('info-cadencia').textContent = dadosProducao.turno;
         document.getElementById('info-equipe').textContent = dadosProducao.equipe;
+        document.getElementById('info_hora_inicio').textContent = dadosProducao.hora_inicio;
+        document.getElementById('info_tempo_estimado_duracao').textContent = formatarTempo(dadosProducao.tempo_estimado_duracao * 3600000);
+        //document.getElementById('info_tempo_estimado_duracao').textContent = dadosProducao.tempo_estimado_duracao.toFixed(4) + " h";
+
+        
+
+        // Teste de modulo (função externa)
+        //const dataagorateste = Date.now();
+        //console.log(dataagorateste);
+        // Teste da função 
+        //const datahorainicial = new Date('2025-11-03T10:00:00Z');
+        //c//onst calculodetempo = calculaIntervalodeTempo(datahorainicial, dadosProducao.hora_inicial2);
+        //console.log(calculodetempo);
+
+
+        // Ativa a contagem
+        hora_inicio_producao = new Date();
+        duracao = true;
 
         // Esconde o modal e mostra a dashboard
         modalIniciarProducao.style.display = 'none';
@@ -85,9 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica dos botões de ação da dashboard
     document.getElementById('btn-trocar-equipe').addEventListener('click', () => {
-        enviarComando('start');
         alert('Comando start enviado!');
-        
+
     });
 
     document.getElementById('btn-suspender').addEventListener('click', () => {
@@ -97,11 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-terminar').addEventListener('click', () => {
         alert('Botão "Terminar Produção" clicado!');
     });
-    
+
     // Inicia a aplicação mostrando o modal de configuração
-    //mostrarModalInicial();
+    mostrarModalInicial();
+
+
+
+
 });
 
+/*
 
     function atualizarDados() {
     fetch('/api/data')
@@ -132,14 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-
-
-
-
-
-
-
-
-
 }
+*/
 

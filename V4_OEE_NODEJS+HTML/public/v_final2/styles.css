@@ -12,7 +12,7 @@ body {
 
 .dashboard-header {
     background-color: #fff;
-    padding: 5px 20px;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -102,21 +102,21 @@ body {
 /* Botões de ação da dashboard */
 .action-buttons-dashboard {
     display: none; /* Oculto por padrão */
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     position: absolute;
     right: 20px;
-    top: 150px;
+    top: 90px;
 }
 
 /* Botões de ação do modal */
 .action-buttons-modal {
     display: flex; /* Visível por padrão */
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     position: absolute;
     right: 20px;
-    top: 150px;
+    top: 90px;
 }
 
 .btn {

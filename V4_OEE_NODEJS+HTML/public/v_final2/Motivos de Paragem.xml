@@ -1,0 +1,58 @@
+                <div class="form-row">
+                    <!-- -->
+                    <!--   COLUNA 1   -->  
+                    <div class="form-group">
+                        <label for="cadencia-input">Movivos de Paragem (Latas / Minuto)</label>
+                        <!--  <input type="text" id="cadencia-preparacao" placeholder="10"> -->
+                        <!-- Código comentado pois aguardamos dados ainda para isto -->
+                        <select id="cadencia-input">
+                            <option value="A">Almoço (A) - Planeada</option>
+                            <option value="J">Jantar (J) - Planeada</option>
+                            <option value="LP">Limpeza (LP) - Planeada</option>
+                            <option value="OEE">Reunião do OEE (OEE) - Planeada</option>
+                            <option value="PQ">Pequeno Almoço / Lanche (PQ) - Planeada</option>
+                            <option value="OTP">Outros Programados (OTP) - Definir o motivo </option>
+                            <option value="AB">Abastecer Rótulos (AB)</option>
+                            <option value="AJ">Ajuste de Máquina (AJ)</option>
+                            <option value="AL">Abastecimento de Embalagens (AL)</option>
+                            <option value="AR">Arrumar Rótulos (AR)</option>
+                            <option value="AV">Avaria com intervenção da manutenção</option>
+                            <option value="AVS">Avaria sem intervenção da manutenção</option>
+                            <option value="BC">Bordo de linha cheio</option>
+                            <option value="CR">Corrigir rótulos</option>
+                            <option value="ED">Esclarecimento de dúvidas</option>
+                            <option value="F">Filmar paletes (Valentine, Facotil)</option>
+                            <option value="FA">Falta rolo aplicador</option>
+                            <option value="FE">Falta de embalagens</option>
+                            <option value="FP">Falta palete/cama/caixa vazia</option>
+                            <option value="FR">Falta de Rótulos</option>
+                            <option value="FT">Falta talão</option>
+                            <option value="LESSA">Receber LESSA</option>
+                            <option value="MP">Mudança de Posto de trabalho - Escrever motivo</option>
+                            <option value="NP">Necessidades pessoais</option>
+                            <option value="OT">Outros - Definir motivo</option>
+                            <option value="PA">Espera recolha de palete rotulada / Recolha</option>
+                            <option value="PL">Falta plano</option>
+                            <option value="PP">Falta porta-paletes</option>
+                            <option value="RG">Rótulos rasgar</option>
+                            <option value="RM">Rotulagem Manual</option>
+                            <option value="SE">Separar material</option>
+                            <option value="TB">Trocar bobine</option>
+                            <option value="TP">Troca plano</option>
+                            <option value="P1">Problema na estação 1</option>
+                            <option value="P2">Problema na estação 2</option>
+                            <option value="P3">Problema na estação 3</option>
+                        </select>
+
+                    </div>
+                    <!--   COLUNA 2   -->  
+                    <div class="form-group">
+                        <label for="objetivo-input">Tempo estimado de Preparação (min)</label>
+                        <!-- <input type="text" id="tempo-estimado-preparacao" placeholder="15">-->
+                        <select id="tempo-estimado-preparacao">
+                            <option value="7">Embalagem - 7 minutos</option>
+                            <option value="5">Marca - 5 minutos</option>
+                        </select>
+
+                    </div>
+                </div>  
