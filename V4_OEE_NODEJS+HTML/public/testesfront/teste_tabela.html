@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabela Interativa de Objeto</title>
+    <style>
+        /* Estilos básicos para a tabela */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer; /* Adiciona um cursor para indicar que é interativo */
+        }
+        /* Estilos opcionais para dar destaque ao passar o mouse */
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Propriedades do Objeto Produto</h1>
+    
+    <div id="tabela-container">
+    // A tabela será gerada aqui via JavaScript
+    </div>
+
+    <script>
+        // 1. Objeto de exemplo (poderia ser um array de objetos para uma tabela mais complexa)
+        const produto = {
+            id: 101,
+            nome: "Optoacoplador PC817",
+            fabricante: "Sharp",
+            pins: 4,
+            tamanho: "Pequeno",
+            disponivel: true
+        };
+
+        // 2. Referência ao contêiner da tabela no HTML
+        const container = document.getElementById('tabela-container');
+
+        // 3. Cria a estrutura da tabela
+        const tabela = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+
+        // 4. Cria o cabeçalho (TableHeader)
+        const cabecalhoLinha = document.createElement('tr');
+
+        // Colunas do cabeçalho
+        const thPropriedade = document.createElement('th');
+        thPropriedade.textContent = "Propriedade";
+        
+        const thValor = document.createElement('th');
+        thValor.textContent = "Valor";
+
+        cabecalhoLinha.appendChild(thPropriedade);
+        cabecalhoLinha.appendChild(thValor);
+        thead.appendChild(cabecalhoLinha);
+
+        // 5. Preenche o corpo da tabela (TableBody)
+        // Itera sobre as propriedades do objeto 'produto'
+        for (const chave in produto) {
+            // Verifica se a propriedade pertence ao próprio objeto (e não ao protótipo)
+            if (produto.hasOwnProperty(chave)) {
+                const linha = document.createElement('tr');
+                
+                // Célula para a Propriedade (Chave)
+                const celulaPropriedade = document.createElement('td');
+                // Formata a chave para que fique mais legível (opcional)
+                celulaPropriedade.textContent = chave.charAt(0).toUpperCase() + chave.slice(1);
+                
+                // Célula para o Valor
+                const celulaValor = document.createElement('td');
+                celulaValor.textContent = produto[chave];
+
+                linha.appendChild(celulaPropriedade);
+                linha.appendChild(celulaValor);
+                tbody.appendChild(linha);
+            }
+        }
+
+        // 6. Monta a tabela
+        tabela.appendChild(thead);
+        tabela.appendChild(tbody);
+        container.appendChild(tabela);
+
+
+        /*
+         * Interatividade Extra: Exemplo de interação ao clicar na linha
+         * Adiciona um listener de evento em todas as linhas do corpo da tabela
+         */
+        const linhasCorpo = tbody.querySelectorAll('tr');
+        linhasCorpo.forEach(linha => {
+            linha.addEventListener('click', function() {
+                // Remove a classe de destaque de outras linhas
+                linhasCorpo.forEach(r => r.classList.remove('destaque'));
+                
+                // Adiciona uma classe de destaque à linha clicada
+                this.classList.toggle('destaque'); 
+                
+                // Exemplo de saída no console
+                const prop = this.children[0].textContent;
+                const valor = this.children[1].textContent;
+                console.log(`Linha Clicada: ${prop} = ${valor}`);
+
+                // Exemplo de Alerta no navegador
+                alert(`Você clicou na propriedade: ${prop}\nValor: ${valor}`);
+            });
+        });
+        
+        // Estilo CSS para o destaque da linha clicada
+        const style = document.createElement('style');
+        style.textContent = `.destaque { background-color: #ffc107; font-weight: bold; }`;
+        document.head.appendChild(style);
+
+
+    </script>
+
+</body>
+</html>

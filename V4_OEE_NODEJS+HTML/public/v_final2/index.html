@@ -23,6 +23,7 @@
 
     <!--      CONTEÚDO DO CONTAINER PRINCIPAL DO OEE  -->
     <div class="main-container">
+        <!-- Seção de Informações da Barra Lateral -->
         <aside class="sidebar">
             <nav>
                 <ul>
@@ -50,7 +51,9 @@
             </nav>
         </aside>
 
-        <main class="dashboard-content" id="dashboard-content">
+        <!-- Seção de Informações Gerais da DASHBOARD -->
+        <main class="dashboard-content" id="dashboard-content"> 
+            <!-- Secção de Informações sobre o Fabrico, OF, Quantidade, Cadência, Etc-->
             <section class="info-geral">
                 <div class="info-card">
                     <span class="label">Fábrica e Linha</span>
@@ -78,7 +81,12 @@
                 </div>
             </section>
 
+            <!-- Seção informações sobre PREPARAÇÃO - H. Início, Tempo estimado, Duração, Hora de Fim -->
             <section class="info-geral">
+                <div class="info-card">
+                    <span class="label">PREPARAÇÃO</span>
+                    <span class="value"></span>
+                </div>
                 <div class="info-card">
                     <span class="label">Hora de Início:</span>
                     <span class="value" id="info_hora_inicio"></span>
@@ -89,19 +97,51 @@
                 </div>
                 <div class="info-card">
                     <span class="label">Duração:</span>
-                    <span class="value" id="info-linha-teste3"></span>
+                    <span class="value" id="info-tempo-decorrido"></span>
                 </div>
                 <div class="info-card">
-                    <span class="label">Contagem de Entrada:</span>
-                    <span class="value" id="info-linha-teste4"></span>
+                    <span class="label">Hora de Fim:</span>
+                    <span class="value" id="info-linha-teste6"></span>
                 </div>
-                    <div class="info-card">
+                <!-- 
+                <div class="info-card">
                     <span class="label">Contagem de Saída:</span>
-                    <span class="value" id="info-linha-teste4"></span>
+                    <span class="value" id="info-linha-teste7"></span>
                 </div>
-
+                -->
             </section>
 
+            <!-- Seção informações sobre PRODUÇÃO - H. Início, Tempo estimado, Duração, Hora de Fim  -->
+            <section class="info-geral">
+                <div class="info-card">
+                    <span class="label">PRODUÇÃO</span>
+                    <span class="value"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Hora de Início:</span>
+                    <span class="value" id="info_hora_inicio_producao"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Tempo estimado de Duração:</span>
+                    <span class="value" id="info_tempo_estimado_duracao_producao"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Duração:</span>
+                    <span class="value" id="info-tempo-decorrido_producao"></span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Hora de Fim:</span>
+                    <span class="value" id="info-linha-teste4"></span>
+                </div>
+                <!--
+                <div class="info-card">
+                    <span class="label">Contagem de Saída:</span>
+                    <span class="value" id="info-linha-teste5"></span>
+                </div>
+                -->
+            </section>
+
+            <!-- Seção informações sobre OEE - OEE, Qualidade, Disponibilidade e Performance  -->
             <section class="oee-section">
                 <div class="oee-card">
                     <div class="label">OEE</div>
@@ -125,6 +165,7 @@
                 </div>
             </section>
 
+            <!-- Seção de KPIs - Cadência Média, Unidades produzidas, Objetivo atual -->
             <section class="kpi-section">
                 <div class="kpi-card">
                     <div class="label">KPI</div>
@@ -155,7 +196,7 @@
             <span class="icon"></span>SUSPENDER PRODUÇÃO
         </button>
         <button id="btn-terminar" class="btn btn-danger">
-            <span class="icon"></span>TERMINAR PRODUÇÃO
+            <span class="icon"></span>TERMINAR PREPARAÇÃO
         </button>
     </div>
 
@@ -210,14 +251,14 @@
                             <option value="960">Embalagem 04 - 4L - sem rótulo - com pastilha - 960/h</option>
 
                             <option value="960">Embalagem 05 - 5L - com rótulo - com pastilha - 960/h</option>
-                            <option value="960">Embalagem 05 - 5L - com rótulo - sem pastilha - 1020/h</option>
+                            <option value="1020">Embalagem 05 - 5L - com rótulo - sem pastilha - 1020/h</option>
 
-                            <option value="960">Embalagem 50 - 0,5L - com rótulo - com pastilha - 1620/h</option>
-                            <option value="960">Embalagem 50 - 0,5L - com rótulo - sem pastilha - 1620/h</option>
+                            <option value="1620">Embalagem 50 - 0,5L - com rótulo - com pastilha - 1620/h</option>
+                            <option value="1620">Embalagem 50 - 0,5L - com rótulo - sem pastilha - 1620/h</option>
 
                             <option value="960">Embalagem 2 - 2L - com rótulo - com pastilha - 960/h</option>
 
-                            <option value="960">Embalagem 25 - 0,25L - com rótulo - sem pastilha - 1800/h</option>
+                            <option value="1800">Embalagem 25 - 0,25L - com rótulo - sem pastilha - 1800/h</option>
 
 
                         </select>
@@ -232,9 +273,9 @@
                             <option value="5">Marca - 5 minutos</option>
                         </select>
                     </div>
-                </div>                                      
+                </div>
             </div>
-            
+
             <!--     FOOTER / RODAPÉ  Botões CANCELAR E INICIAR)  -->
             <div class="modal-footer">
                 <button id="btn-preparacao-cancelar" class="btn btn-secondary">CANCELAR</button>
@@ -243,10 +284,10 @@
         </div>
     </div>
 
-    <!--     MODAL PRODUÇÃO     -->
-    <div id="modal-iniciar-producao" class="modal-overlay">
+    <!--     MODAL SUSPENDER     -->
+    <div id="modal-suspender" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="modal-title">Iniciar produção</h2>
+            <h2 class="modal-title">Suspender Produção</h2>
             <div class="modal-body">
                 <div class="form-row">
                     <div class="form-group">
@@ -256,20 +297,54 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="nome-produto">Id do produto</label>
-                        <input type="text" id="nome-produto" placeholder="Id do produto">
+                        <label for="nome-produto">Id</label>
+                        <input type="text" id="nome-produto" placeholder="Id">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="cadencia-input">Cadência</label>
+                        <label for="cadencia-input">Motivo da Paragem</label>
                         <select id="cadencia-input">
-                            <option value="automatico">Automático</option>
-                            <option value="manual">Manual</option>
+                            <option value="A">Almoço (A) - Planeada</option>
+                            <option value="J">Jantar (J) - Planeada</option>
+                            <option value="LP">Limpeza (LP) - Planeada</option>
+                            <option value="OEE">Reunião do OEE (OEE) - Planeada</option>
+                            <option value="PQ">Pequeno Almoço / Lanche (PQ) - Planeada</option>
+                            <option value="OTP">Outros Programados (OTP) - Definir o motivo </option>
+                            <option value="AB">Abastecer Rótulos (AB)</option>
+                            <option value="AJ">Ajuste de Máquina (AJ)</option>
+                            <option value="AL">Abastecimento de Embalagens (AL)</option>
+                            <option value="AR">Arrumar Rótulos (AR)</option>
+                            <option value="AV">Avaria com intervenção da manutenção</option>
+                            <option value="AVS">Avaria sem intervenção da manutenção</option>
+                            <option value="BC">Bordo de linha cheio</option>
+                            <option value="CR">Corrigir rótulos</option>
+                            <option value="ED">Esclarecimento de dúvidas</option>
+                            <option value="F">Filmar paletes (Valentine, Facotil)</option>
+                            <option value="FA">Falta rolo aplicador</option>
+                            <option value="FE">Falta de embalagens</option>
+                            <option value="FP">Falta palete/cama/caixa vazia</option>
+                            <option value="FR">Falta de Rótulos</option>
+                            <option value="FT">Falta talão</option>
+                            <option value="LESSA">Receber LESSA</option>
+                            <option value="MP">Mudança de Posto de trabalho - Escrever motivo</option>
+                            <option value="NP">Necessidades pessoais</option>
+                            <option value="OT">Outros - Definir motivo</option>
+                            <option value="PA">Espera recolha de palete rotulada / Recolha</option>
+                            <option value="PL">Falta plano</option>
+                            <option value="PP">Falta porta-paletes</option>
+                            <option value="RG">Rótulos rasgar</option>
+                            <option value="RM">Rotulagem Manual</option>
+                            <option value="SE">Separar material</option>
+                            <option value="TB">Trocar bobine</option>
+                            <option value="TP">Troca plano</option>
+                            <option value="P1">Problema na estação 1</option>
+                            <option value="P2">Problema na estação 2</option>
+                            <option value="P3">Problema na estação 3</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="objetivo-input">Objetivo</label>
+                        <label for="objetivo-input">Observação</label>
                         <input type="text" id="objetivo-input" placeholder="Objetivo">
                     </div>
                 </div>
@@ -277,8 +352,8 @@
 
 
             <div class="modal-footer">
-                <button id="btn-cancelar" class="btn btn-secondary">CANCELAR</button>
-                <button id="btn-iniciar" class="btn btn-primary">INICIAR</button>
+                <button id="btn-cancelar-modal-suspender" class="btn btn-secondary">CANCELAR</button>
+                <button id="btn-iniciar-modal-suspender" class="btn btn-primary">INICIAR</button>
             </div>
         </div>
     </div>
@@ -289,13 +364,18 @@
         <button id="btn-abrir-modal-preparacao" class="btn btn-primary">
             <span class="icon"></span>INICIAR PREPARAÇÃO
         </button>
-        
+
+        <!--
         <button id="btn-abrir-modal" class="btn btn-secondary">
             <span class="icon"></span>INICIAR PRODUÇÃO
         </button>
+        -->
+        <!--
         <button class="btn btn-secondary">
             <span class="icon"></span>INICIAR MANUTENÇÃO
         </button>
+        -->
+
     </div>
 
     <!-- 

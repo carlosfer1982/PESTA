@@ -1,13 +1,14 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
 import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
-
+// Variaveis globais
 let duracao = false;
 let hora_inicio_producao = null;
 let duracao_atual = null;
+let pausa = false;
+let preparacao = false;
 
 
-// Variavel global
-
+// Código principal a ser executado após o carregamento do DOM
 
 
 
@@ -19,17 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionButtonsModal = document.getElementById('action-buttons-modal');
 
     // Elementos do Modal Preparação
+    // BOTÃO: INICIAR E CANCELAR
     const btnIniciarPreparacao = document.getElementById('btn-preparacao-iniciar');
     const btnCancelarPreparacao = document.getElementById('btn-preparacao-cancelar');
 
+    // Botão DO ECRÃ Principal "INICIAR PREPARAÇÃO", "INICIAR PRODUÇÃO" E "INICIAR MANUTENÇÃO"
     const modalIniciarPreparacao = document.getElementById('modal-iniciar-preparacao');
-    const modalIniciarProducao = document.getElementById('modal-iniciar-producao');
-    const btnAbrirModal = document.getElementById('btn-abrir-modal');
-    const btnAbrirModalPreparacao = document.getElementById('btn-abrir-modal-preparacao');
-    const btnCancelar = document.getElementById('btn-cancelar');
-    const btnIniciar = document.getElementById('btn-iniciar');
+    const modalIniciarProducao = document.getElementById('modal-suspender');
 
-    
+
+    //const btnAbrirModal = document.getElementById('btn-abrir-modal');
+    const btnAbrirModalPreparacao = document.getElementById('btn-abrir-modal-preparacao');
+    const btnCancelarSuspender = document.getElementById('btn-cancelar-modal-suspender');
+    const btnIniciarSuspender = document.getElementById('btn-iniciar-modal-suspender');
+
+    const btnSuspender = document.getElementById('btn-suspender');
+
+
 
 
 
@@ -42,19 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Loop de 1 segundo
     // Nesta secção devem estar os códigos que se repetem a cada 1 segundo
     setInterval(() => {
-        
+
         // Atualizada Data e Hora exibida no cabeçalho
         atualizarDataHora();
-        
-        
-        
+
+
+
         // Atualização do info-card-duração
-        if(duracao)
-        {            
+        if (duracao) {
             duracao_atual = atualizarDuracao(hora_inicio_producao);
-            document.getElementById('info-linha-teste3').textContent = formatarTempo(duracao_atual);
+            document.getElementById('info-tempo-decorrido').textContent = formatarTempo(duracao_atual);
         }
-        
+
     }, 1000);
 
 
@@ -93,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionButtonsDashboard.style.display = 'none';
     }
 
-    // Abre o modal quando o botão "Iniciar Preparação" for clicado
+    // Abre o modal quando o botão "INICIAR PREPARAÇÃO" for clicado
     btnAbrirModalPreparacao.addEventListener('click', () => {
         modalIniciarPreparacao.style.display = 'flex';
         //actionButtonsModal.style.display = 'flex';
@@ -104,20 +110,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Abre o modal quando o botão "Iniciar Produção" for clicado
-    btnAbrirModal.addEventListener('click', () => {
-        modalIniciarProducao.style.display = 'flex';
-        actionButtonsModal.style.display = 'flex';
-        dashboardContent.style.display = 'none';
-        actionButtonsDashboard.style.display = 'none';
+    //btnAbrirModal.addEventListener('click', () => {
+
+    //});
+
+    // bOTÃO SUSPENDER PRODUÇÃO - MODAL SUSPENDER
+    btnIniciarSuspender.addEventListener('click', () => {
+        alert('Iniciar botão Modal Suspender - btn-iniciar-modal-suspender');
+        if (pausa == false) {
+            pausa = true;
+            modalIniciarProducao.style.display = 'none';
+            actionButtonsModal.style.display = 'none';
+            dashboardContent.style.display = 'flex';
+            actionButtonsDashboard.style.display = 'flex';  
+            btnSuspender.textContent = "RETOMAR PRODUÇÃO";
+        }
+        else {
+            pausa = false;
+            modalIniciarProducao.style.display = 'none';
+            actionButtonsModal.style.display = 'none';
+            dashboardContent.style.display = 'flex';
+            actionButtonsDashboard.style.display = 'flex';
+            btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+        }
+
+
     });
 
-    // Lógica para o botão "Cancelar" do modal
-    btnCancelar.addEventListener('click', () => {
+    // Lógica para o botão "Cancelar" do modal SUSPENDER
+    btnCancelarSuspender.addEventListener('click', () => {
         modalIniciarProducao.style.display = 'none';
-        actionButtonsModal.style.display = 'flex';
-        dashboardContent.style.display = 'none';
-        actionButtonsDashboard.style.display = 'none';
-        alert('Cancelar botão Modal Produção');
+        actionButtonsModal.style.display = 'none';
+        dashboardContent.style.display = 'flex';
+        actionButtonsDashboard.style.display = 'flex';
+        alert('Cancelar botão Modal Suspender');
     });
 
     // Lógica para o botão "Iniciar" do modal
@@ -171,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info_tempo_estimado_duracao').textContent = formatarTempo(dadosProducao.tempo_estimado_duracao * 3600000);
         //document.getElementById('info_tempo_estimado_duracao').textContent = dadosProducao.tempo_estimado_duracao.toFixed(4) + " h";
 
-        
+
 
         // Teste de modulo (função externa)
         //const dataagorateste = Date.now();
@@ -199,8 +225,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    document.getElementById('btn-suspender').addEventListener('click', () => {
-        alert('Botão "Suspender Produção" clicado!');
+    btnSuspender.addEventListener('click', () => {
+        alert('Botão "Suspender Produção" clicado!   btn-suspender ');
+        if(pausa == false) {
+        modalIniciarProducao.style.display = 'flex';
+        actionButtonsModal.style.display = 'none';
+        dashboardContent.style.display = 'flex';
+        actionButtonsDashboard.style.display = 'flex';
+        }
+        else {
+            pausa = false;
+            //modalIniciarProducao.style.display = 'none';
+            //actionButtonsModal.style.display = 'none';
+            //dashboardContent.style.display = 'flex';
+            //actionButtonsDashboard.style.display = 'flex';
+            btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+        }
+
+
+
     });
 
     document.getElementById('btn-terminar').addEventListener('click', () => {
