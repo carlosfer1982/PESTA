@@ -17,7 +17,16 @@ body {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
 }
+.dashboard-header .data-hora {
+    margin-top: 5px;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+
 
 .main-container {
     display: flex;
@@ -69,7 +78,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    width: 80%; /*Alteração da largura da página. É Flex, mas fica em 80% */
+    width: 100%; /*Alteração da largura da página. É Flex, mas fica em 80% */
 }
 
 .info-card, .oee-card, .kpi-card {
@@ -102,11 +111,11 @@ body {
 /* Botões de ação da dashboard */
 .action-buttons-dashboard {
     display: none; /* Oculto por padrão */
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     position: absolute;
     right: 20px;
-    top: 150px;
+    top: 60px;
 }
 
 /* Botões de ação do modal */
@@ -116,7 +125,7 @@ body {
     gap: 10px;
     position: absolute;
     right: 20px;
-    top: 150px;
+    top: 60px;
 }
 
 .btn {
