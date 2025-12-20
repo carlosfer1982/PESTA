@@ -1,5 +1,18 @@
 // ficheiro: myscripts.js
-
+export class DadosProducao {
+    constructor() {
+        this.horaInicioPreparacao = null;
+        this.tempoEstimadoPreparacao = null;
+        this.duracaoPreparacao = null;
+        this.tempoParagemPreparacao = null;
+        this.horaFimPreparacao = null;
+        this.horaInicioProducao = null;
+        this.tempoEstimadoProducao = null;
+        this.duracaoProducao = null;
+        this.tempoParagemProducao = null;
+        this.horaFimProducao = null;
+    }
+}
 
 
 // Função para formatar o tempo em milissegundos para HH:MM:SS
@@ -41,3 +54,4 @@ export function atualizarDuracao(hora_inicio) {
         const dataHoraFormatada = agora.toLocaleDateString('pt-PT', options).replace(',', '');
         elementoDataHora.textContent = dataHoraFormatada;
     }
+

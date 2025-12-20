@@ -1,11 +1,20 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
 import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
+import { DadosProducao, teste } from './dadosproducao.js';
+
+
+
+
 // Variaveis globais
 let duracao = false;
 let hora_inicio_producao = null;
 let duracao_atual = null;
 let pausa = false;
 let preparacao = false;
+const dadosProducao = new DadosProducao();
+dadosProducao.horaInicioPreparacao = new Date();
+dadosProducao.horaInicioProducao = new Date();
+console.log(JSON.stringify(dadosProducao, null, 2));
 
 
 // Código principal a ser executado após o carregamento do DOM
@@ -248,6 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('btn-terminar').addEventListener('click', () => {
         alert('Botão "Terminar Produção" clicado!');
+        DadosProducao.horaFimProducao = new Date();
+        console.log("Hora Fim da Produção", DadosProducao.horaFimProducao);
     });
 
     btnIniciarProducao.addEventListener('click', () => {
