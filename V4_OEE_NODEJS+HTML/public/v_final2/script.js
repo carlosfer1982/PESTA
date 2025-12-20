@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIniciarSuspender = document.getElementById('btn-iniciar-modal-suspender');
 
     const btnSuspender = document.getElementById('btn-suspender');
-
+    const btnIniciarProducao = document.getElementById('btn-iniciar-producao');
 
 
 
@@ -248,6 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('btn-terminar').addEventListener('click', () => {
         alert('Botão "Terminar Produção" clicado!');
+    });
+
+    btnIniciarProducao.addEventListener('click', () => {
+        alert('Botão "Iniciar Produção" clicado!   btn-iniciar-producao ');
+        
     });
 
     // Inicia a aplicação mostrando o modal de configuração
