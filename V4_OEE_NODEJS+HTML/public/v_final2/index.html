@@ -200,7 +200,7 @@
         <button id="btn-iniciar-producao" class="btn btn-primary">
             <span class="icon"></span>INICIAR PRODUÇÃO
         </button>
-        <button id="btn-trocar-equipe" class="btn btn-primary">
+        <button id="btn-analisar-paragens" class="btn btn-primary">
             <span class="icon"></span>ANALISAR PARAGENS
         </button>
         <button id="btn-suspender" class="btn btn-secondary">
@@ -292,6 +292,40 @@
             <div class="modal-footer">
                 <button id="btn-preparacao-cancelar" class="btn btn-secondary">CANCELAR</button>
                 <button id="btn-preparacao-iniciar" class="btn btn-primary">INICIAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!--    MODAL ANALISAR PARAGENS    -->
+    <div id="modal-analisar-paragens" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Iniciar preparação</h2>
+            <div class="modal-body">
+                <!--   LINHA 1   -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Motivo da Paragem</th>
+                                    <th>Duração (minutos)</th>
+                                    <th>Hora de Início</th>
+                                    <th>Hora de Fim</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-tempos-paragem">
+                                <!-- As linhas da tabela serão adicionadas dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>               
+            </div>
+
+            <!--     FOOTER / RODAPÉ  Botões CANCELAR E INICIAR)  -->
+            <div class="modal-footer">
+                <button id="btn-analisar-paragens-cancelar" class="btn btn-secondary">CANCELAR</button>
+            <!--     <button id="btn-preparacao-iniciar" class="btn btn-primary">INICIAR</button> -->
             </div>
         </div>
     </div>

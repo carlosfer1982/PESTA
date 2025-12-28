@@ -11,10 +11,39 @@ let hora_inicio_producao = null;
 let duracao_atual = null;
 let pausa = false;
 let preparacao = false;
+// Teste de lista de tempos
+let listaTempo = [{data:"", duracao: 0}];
+let listaTempo2 = [];
+//console.log("A variável listaTempo foi criada e contém:\n", listaTempo, "\n\n");
+
+// Alterações a lista de tempos
+listaTempo[0].data = "01/01/2025";
+listaTempo[0].duracao = 100;
+listaTempo.push({data: "02/01/2025", duracao: 120});
+listaTempo.push({data: "04/05/2025", duracao: 150});
+listaTempo.push({data: "04/05/2025", duracao: 200});
+for(let i=0; i<listaTempo.length; i++) {
+    console.log("Elemento ", i, ": ", listaTempo[i]);
+}
+
+console.log("A variável listaTempo possui: ", listaTempo.length," elementos." , "\n\n");
+console.log("Após remover 2 elementos... ");
+listaTempo.splice(1,2); // Remove o segundo elemento
+console.log("A variável listaTempo possui: ", listaTempo.length," elementos." , "\n\n");
+for(let i=0; i<listaTempo.length; i++) {
+    console.log("Elemento ", i, ": ", listaTempo[i]);
+}
+
+
+// Teste da classe DadosProducao
 const dadosProducao = new DadosProducao();
 dadosProducao.horaInicioPreparacao = new Date();
 dadosProducao.horaInicioProducao = new Date();
-console.log(JSON.stringify(dadosProducao, null, 2));
+console.log("A vairável dadosProducao foi instanciada como dadosProducao. \n",
+    "e é apresentada assim no console:\n",
+    JSON.stringify(dadosProducao, null, 2));
+
+
 
 
 // Código principal a ser executado após o carregamento do DOM
@@ -33,15 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIniciarPreparacao = document.getElementById('btn-preparacao-iniciar');
     const btnCancelarPreparacao = document.getElementById('btn-preparacao-cancelar');
 
+    const btnAnalisarParagensCancelar = document.getElementById('btn-analisar-paragens-cancelar');
+
     // Botão DO ECRÃ Principal "INICIAR PREPARAÇÃO", "INICIAR PRODUÇÃO" E "INICIAR MANUTENÇÃO"
     const modalIniciarPreparacao = document.getElementById('modal-iniciar-preparacao');
     const modalIniciarProducao = document.getElementById('modal-suspender');
+    const modalAnalisarParagens = document.getElementById('modal-analisar-paragens');
 
 
     //const btnAbrirModal = document.getElementById('btn-abrir-modal');
     const btnAbrirModalPreparacao = document.getElementById('btn-abrir-modal-preparacao');
     const btnCancelarSuspender = document.getElementById('btn-cancelar-modal-suspender');
     const btnIniciarSuspender = document.getElementById('btn-iniciar-modal-suspender');
+    const btnAnalisarParagens = document.getElementById('btn-analisar-paragens');
 
     const btnSuspender = document.getElementById('btn-suspender');
     const btnIniciarProducao = document.getElementById('btn-iniciar-producao');
@@ -92,10 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+
+    // Lógica para o botão "Cancelar" do modal de Analisar Paragens
+    btnAnalisarParagensCancelar.addEventListener('click', () => {
+        alert('Cancelar botão Modal Analisar Paragens');
+        modalAnalisarParagens.style.display = 'none';
+    });
+
     // Lógica para o botão "Cancelar" do modal de Preparação
     btnCancelarPreparacao.addEventListener('click', () => {
         alert('Cancelar botão Modal Preparação');
         modalIniciarPreparacao.style.display = 'none';
+        modalAnalisarParagens.style.display = 'none';
 
 
     });
@@ -133,6 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dashboardContent.style.display = 'flex';
             actionButtonsDashboard.style.display = 'flex';  
             btnSuspender.textContent = "RETOMAR PRODUÇÃO";
+            listaTempo2.push({ horaInicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),   
+            tipodeParagem: document.getElementById('cadencia-input').value});
+            console.log("Lista de Tempos de Paragem:", listaTempo2);
         }
         else {
             pausa = false;
@@ -229,8 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lógica dos botões de ação da dashboard
-    document.getElementById('btn-trocar-equipe').addEventListener('click', () => {
-        alert('Comando start enviado!');
+    btnAnalisarParagens.addEventListener('click', () => {
+        alert('btn-analisar-paragens');
+        alert(JSON.stringify(listaTempo2, null, 2)); // Mostra a lista de tempos no
+        modalAnalisarParagens.style.display = 'flex';
 
     });
 
