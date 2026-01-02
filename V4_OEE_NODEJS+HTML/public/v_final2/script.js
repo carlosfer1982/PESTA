@@ -1,6 +1,7 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
 import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
 import { DadosProducao, teste } from './dadosproducao.js';
+import { paragem } from './dadosproducao.js';
 
 
 
@@ -12,11 +13,15 @@ let duracao_atual = null;
 let pausa = false;
 let preparacao = false;
 // Teste de lista de tempos
+
+let modeloParagem = new paragem();
+let paragemLista = [];
 let listaTempo = [{data:"", duracao: 0}];
 let listaTempo2 = [];
 //console.log("A variável listaTempo foi criada e contém:\n", listaTempo, "\n\n");
 
 // Alterações a lista de tempos
+/*
 listaTempo[0].data = "01/01/2025";
 listaTempo[0].duracao = 100;
 listaTempo.push({data: "02/01/2025", duracao: 120});
@@ -44,7 +49,62 @@ console.log("A vairável dadosProducao foi instanciada como dadosProducao. \n",
     JSON.stringify(dadosProducao, null, 2));
 
 
+// Teste de criação de classe 
+class AmostraProducao {
+  constructor({ timestamp = null, tensao = null, corrente = null, caudal = null } = {}) {
+    this.timestamp = timestamp;
+    this.tensao = tensao;
+    this.corrente = corrente;
+    this.caudal = caudal;
+  }
+}
+let dadosProducaoAmostrados = [];
 
+dadosProducaoAmostrados.push(
+  new AmostraProducao({
+    timestamp: Date.now(),
+    tensao: 230,
+    corrente: 1.8,
+    caudal: 12.3
+  })
+);
+dadosProducaoAmostrados.push(
+  new AmostraProducao({
+    timestamp: Date.now(),
+    tensao: 231,
+    corrente: 1.9
+    
+  })
+);
+dadosProducaoAmostrados[1].caudal = 15.6; // Adiciona o caudal à segunda amostra
+
+
+console.log("A variável dadosProducaoAmostrados contém:\n", JSON.stringify(dadosProducaoAmostrados, null, 2), "\n\n");  
+*/
+
+/*
+// ********** Alterações da classe AmostraPorducao *************
+// Instancia objeto da classe paragem
+
+let modelo = new paragem();
+let listatempo3 = [];
+
+modelo.horaInicio = new Date();
+modelo.id = 0;
+
+
+console.log("Primeiro Print: \n\n " ,JSON.stringify(listatempo3,null,2));
+
+// Trabalhando com o objeto (listatempo3) do tipo paragem
+modelo.horaFim = new Date();
+modelo.duracao = modelo.horaFim - modelo.horaInicio;
+listatempo3.push({...modelo});
+
+modelo = new paragem();
+listatempo3.push({...modelo});
+console.log("Segundo Print: \n\n", JSON.stringify(listatempo3,null,2));
+*/
+//////////////////////////////////////////////////////////////
 
 // Código principal a ser executado após o carregamento do DOM
 
@@ -80,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIniciarProducao = document.getElementById('btn-iniciar-producao');
 
 
-
+    // Tabela de paragens
+    const tabelaTemposParagem = document.getElementById('tabela-tempos-paragem');
 
 
     // Atualiza a data e hora a cada segundo
@@ -174,9 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
             dashboardContent.style.display = 'flex';
             actionButtonsDashboard.style.display = 'flex';  
             btnSuspender.textContent = "RETOMAR PRODUÇÃO";
-            listaTempo2.push({ horaInicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),   
-            tipodeParagem: document.getElementById('cadencia-input').value});
-            console.log("Lista de Tempos de Paragem:", listaTempo2);
+            modeloParagem = 
+            {
+                id: modeloParagem.id + 1,
+                horaInicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),   
+                tipoParagem: document.getElementById('cadencia-input').value
+                //horaFim: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                //duracao: modeloParagem.horaFim - modeloParagem.horaInicio            
+            }
+            
+            //console.log("Lista de Tempos de Paragem:", paragemLista);
         }
         else {
             pausa = false;
@@ -185,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dashboardContent.style.display = 'flex';
             actionButtonsDashboard.style.display = 'flex';
             btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+
         }
 
 
@@ -233,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ordem: ordemProducao || "OF2025-1000",
             turno: cadenciaInput,
             equipe: "AO (1 pessoa)",
-            hora_inicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            hora_inicio: new Date().toLocaleTimeString('pt-PT'),
             tempo_estimado_duracao: (quantidadeProducao / cadenciaInput) + (Number(objetivoInput) / 60),
             hora_inicial2: Date.now()
 
@@ -273,13 +342,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lógica dos botões de ação da dashboard
+    // BOTÃO ANALISAR PARAGENS
     btnAnalisarParagens.addEventListener('click', () => {
         alert('btn-analisar-paragens');
-        alert(JSON.stringify(listaTempo2, null, 2)); // Mostra a lista de tempos no
+        alert(JSON.stringify(paragemLista, null, 2)); // Mostra a lista de tempos no
         modalAnalisarParagens.style.display = 'flex';
+        // Preenche a tabela com os dados da listaTempo2
+        tabelaTemposParagem.innerHTML = ''; // Limpa a tabela antes de preencher
+        paragemLista.forEach((item, index) => {
+            const row = document.createElement('tr'); // Cria uma nova linha
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.tipoParagem}</td>
+                <td>${item.duracao}</td>
+                <td>${item.horaInicio}</td>
+                <td>${item.horaFim}</td>
+            `;  // Preenche as células da linha
+            tabelaTemposParagem.appendChild(row); // Adiciona a linha à tabela
+        });
+
+
+
 
     });
 
+    // BOTÃO SUSPENDER PRODUÇÃO
     btnSuspender.addEventListener('click', () => {
         alert('Botão "Suspender Produção" clicado!   btn-suspender ');
         if(pausa == false) {
@@ -295,6 +382,16 @@ document.addEventListener('DOMContentLoaded', () => {
             //dashboardContent.style.display = 'flex';
             //actionButtonsDashboard.style.display = 'flex';
             btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+            
+            
+            modeloParagem.horaFim = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            console.log(modeloParagem.horaFim);
+            console.log(modeloParagem.horaInicio);
+            console.log((modeloParagem.horaFim));
+            console.log(modeloParagem.duracao);
+            modeloParagem.duracao = 1000;
+            paragemLista.push(modeloParagem);
+            console.log(paragemLista);
         }
 
 
