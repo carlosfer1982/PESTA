@@ -28,6 +28,7 @@ export class paragem {
     this.tipoParagem = null;
     this.duracao = null;
     this.horaFim = null;
+    this.observacao = null;
     //this.completa = false;
   }
    

@@ -108,8 +108,6 @@ console.log("Segundo Print: \n\n", JSON.stringify(listatempo3,null,2));
 
 // Código principal a ser executado após o carregamento do DOM
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // Referências aos elementos HTML
@@ -239,9 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: modeloParagem.id + 1,
                 horaInicio: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),   
-                tipoParagem: document.getElementById('cadencia-input').value
-                //horaFim: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                //duracao: modeloParagem.horaFim - modeloParagem.horaInicio            
+                tipoParagem: document.getElementById('paragem-tipo').value,
+                observacao: document.getElementById('paragem-observacao').value
             }
             
             //console.log("Lista de Tempos de Paragem:", paragemLista);
@@ -357,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.duracao}</td>
                 <td>${item.horaInicio}</td>
                 <td>${item.horaFim}</td>
+                <td>${item.observacao}</td>
             `;  // Preenche as células da linha
             tabelaTemposParagem.appendChild(row); // Adiciona a linha à tabela
         });
@@ -382,16 +380,21 @@ document.addEventListener('DOMContentLoaded', () => {
             //dashboardContent.style.display = 'flex';
             //actionButtonsDashboard.style.display = 'flex';
             btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
-            
+            document.getElementById('paragem-tipo').value = "";
+            document.getElementById('paragem-observacao').value = "";
+
             
             modeloParagem.horaFim = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            console.log(modeloParagem.horaFim);
-            console.log(modeloParagem.horaInicio);
-            console.log((modeloParagem.horaFim));
-            console.log(modeloParagem.duracao);
-            modeloParagem.duracao = 1000;
+            //console.log( "Hora FIM:", modeloParagem.horaFim);
+            //console.log("Hora Inicio:", modeloParagem.horaInicio);
+            modeloParagem.duracao = formatarTempo(calculaIntervalodeTempo(
+                new Date(`1970-01-01T${modeloParagem.horaInicio}Z`),
+                new Date(`1970-01-01T${modeloParagem.horaFim}Z`)
+            )); // duração em segundos    
+            //console.log("Duração: ", modeloParagem.duracao);
             paragemLista.push(modeloParagem);
-            console.log(paragemLista);
+            modeloParagem = new paragem(); // Reseta o modeloParagem para a próxima paragem
+            //console.log(paragemLista);
         }
 
 
