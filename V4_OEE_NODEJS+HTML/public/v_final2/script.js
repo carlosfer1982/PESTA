@@ -1,7 +1,7 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
 import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
-import { DadosProducao, teste } from './dadosproducao.js';
-import { paragem } from './dadosproducao.js';
+import { DadosProducao,  teste} from './dadosproducao.js';
+import { paragem, dadosFabrico, dadosPreparacaoProducao, dadosOEE, dadosKPI } from './dadosproducao.js';
 
 
 
@@ -14,16 +14,31 @@ let pausa = false;
 let preparacao = false;
 // Teste de lista de tempos
 
+
+
+// Instanciação da classe paragem
+let dadosParaEnviar = [];
+let modeloDadosFabrico = new dadosFabrico();
+let modeloDadosPreparacao = new dadosPreparacaoProducao();
+let modeloDadosProducao = new dadosPreparacaoProducao();
+let modeloDadosOEE = new dadosOEE();
+let modeloDadosKPI = new dadosKPI();
+
+dadosParaEnviar = [{modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI}];
+
+//let dadosPreparacaoProducao = [];
 let modeloParagem = new paragem();
 let paragemLista = [];
 let listaTempo = [{data:"", duracao: 0}];
 let listaTempo2 = [];
-//console.log("A variável listaTempo foi criada e contém:\n", listaTempo, "\n\n");
+
+
+console.log("A variável listaTempo foi criada e contém:\n", JSON.stringify(dadosParaEnviar,null,2), "\n\n");
 
 // Alterações a lista de tempos
 /*
 listaTempo[0].data = "01/01/2025";
-listaTempo[0].duracao = 100;
+listaTempo[0].durao = 100;
 listaTempo.push({data: "02/01/2025", duracao: 120});
 listaTempo.push({data: "04/05/2025", duracao: 150});
 listaTempo.push({data: "04/05/2025", duracao: 200});
