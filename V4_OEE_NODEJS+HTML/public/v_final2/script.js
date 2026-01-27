@@ -8,15 +8,15 @@ import { paragem, dadosFabrico, dadosPreparacaoProducao, dadosOEE, dadosKPI } fr
 
 // Variaveis globais
 let duracao = false;
+let duracao_producao = false;
+let hora_inicio_preparacao = null;
 let hora_inicio_producao = null;
 let duracao_atual = null;
 let pausa = false;
-let preparacao = false;
-// Teste de lista de tempos
+let terminar = false;
 
 
-
-// Instanciação da classe paragem
+// Instanciação das classes 
 let dadosParaEnviar = [];
 let modeloDadosFabrico = new dadosFabrico();
 let modeloDadosPreparacao = new dadosPreparacaoProducao();
@@ -24,7 +24,7 @@ let modeloDadosProducao = new dadosPreparacaoProducao();
 let modeloDadosOEE = new dadosOEE();
 let modeloDadosKPI = new dadosKPI();
 
-dadosParaEnviar = [{modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI}];
+// dadosParaEnviar = [{modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI}];
 
 //let dadosPreparacaoProducao = [];
 let modeloParagem = new paragem();
@@ -173,9 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Atualização do info-card-duração
         if (duracao) {
-            duracao_atual = atualizarDuracao(hora_inicio_producao);
+            duracao_atual = atualizarDuracao(hora_inicio_preparacao);
             document.getElementById('info-tempo-decorrido').textContent = formatarTempo(duracao_atual);
         }
+
+        // Atualização do info-card-duração Produção
+        if (duracao_producao) {
+            duracao_atual = atualizarDuracao(hora_inicio_producao);
+            document.getElementById('info-tempo-decorrido_producao').textContent = formatarTempo(duracao_atual);
+        }
+
 
     }, 1000);
 
@@ -195,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionButtonsModal.style.display = 'none';
         dashboardContent.style.display = 'flex';
         actionButtonsDashboard.style.display = 'flex';
+        btnIniciarProducao.style.display = 'none';
 
 
     });
@@ -247,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actionButtonsModal.style.display = 'none';
             dashboardContent.style.display = 'flex';
             actionButtonsDashboard.style.display = 'flex';  
-            btnSuspender.textContent = "RETOMAR PRODUÇÃO";
+            btnSuspender.textContent = "RETOMAR";
             modeloParagem = 
             {
                 id: modeloParagem.id + 1,
@@ -307,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
         */
 
         // Dados preenchidos com os valores do modal ou valores padrão
+        //**  Atenção a variável dadosProducao será eliminada.
         const dadosProducao = {
             linha: equipamento || "RO-11",
             estado: "Em produção",
@@ -320,15 +329,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         };
 
+        modeloDadosFabrico = {
+            equipamento: equipamento || "RO-11",
+            estado: "Em produção",
+            totalaProduzir: quantidadeProducao || "25",
+            ordemFabrico: ordemProducao || "OF2025-1000",
+            cadenciaTeorica: cadenciaInput,
+            equipa: "AO (1 pessoa)"
+            //tempoEstimadoPreparacao: (quantidadeProducao / cadenciaInput) + (Number(objetivoInput) / 60)
+            //hora_inicio: new Date().toLocaleTimeString('pt-PT'),
+            //tempo_estimado_duracao: (quantidadeProducao / cadenciaInput) + (Number(objetivoInput) / 60),
+            //hora_inicial2: Date.now()
+        };
+
+        modeloDadosPreparacao = {
+            horaInicio: new Date().toLocaleTimeString('pt-PT'),
+            tempoEstimado: ((Number(objetivoInput) / 60)) // em milissegundos
+
+
+        };
+        console.log(JSON.stringify(modeloDadosFabrico));
+
+
+
+
         // Preenche a dashboard com os dados do modal
-        document.getElementById('info-linha').textContent = dadosProducao.linha;
-        document.getElementById('info-estado').textContent = dadosProducao.estado;
-        document.getElementById('info-quantidade').textContent = dadosProducao.quantidade;
-        document.getElementById('info-ordem').textContent = dadosProducao.ordem;
-        document.getElementById('info-cadencia').textContent = dadosProducao.turno;
-        document.getElementById('info-equipe').textContent = dadosProducao.equipe;
-        document.getElementById('info_hora_inicio').textContent = dadosProducao.hora_inicio;
-        document.getElementById('info_tempo_estimado_duracao').textContent = formatarTempo(dadosProducao.tempo_estimado_duracao * 3600000);
+        document.getElementById('info-linha').textContent = modeloDadosFabrico.equipamento;
+        document.getElementById('info-estado').textContent = modeloDadosFabrico.estado;
+        document.getElementById('info-quantidade').textContent = modeloDadosFabrico.totalaProduzir;
+        document.getElementById('info-ordem').textContent = modeloDadosFabrico.ordemFabrico;
+        document.getElementById('info-cadencia').textContent = modeloDadosFabrico.cadenciaTeorica;
+        document.getElementById('info-equipe').textContent = modeloDadosFabrico.equipa;
+        document.getElementById('info_hora_inicio').textContent = modeloDadosPreparacao.horaInicio;
+        document.getElementById('info_tempo_estimado_duracao').textContent = formatarTempo(modeloDadosPreparacao.tempoEstimado * 3600000);
         //document.getElementById('info_tempo_estimado_duracao').textContent = dadosProducao.tempo_estimado_duracao.toFixed(4) + " h";
 
 
@@ -343,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // Ativa a contagem
-        hora_inicio_producao = new Date();
+        hora_inicio_preparacao = new Date();
         duracao = true;
 
         // Esconde o modal e mostra a dashboard
@@ -379,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    // BOTÃO SUSPENDER PRODUÇÃO
+    // BOTÃO SUSPENDER
     btnSuspender.addEventListener('click', () => {
         alert('Botão "Suspender Produção" clicado!   btn-suspender ');
         if(pausa == false) {
@@ -394,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //actionButtonsModal.style.display = 'none';
             //dashboardContent.style.display = 'flex';
             //actionButtonsDashboard.style.display = 'flex';
-            btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+            btnSuspender.textContent = "SUSPENDER";
             document.getElementById('paragem-tipo').value = "";
             document.getElementById('paragem-observacao').value = "";
 
@@ -416,10 +449,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+    // BOTÃO TERMINAR PREPARAÇÃO / TERMINAR PRODUÇÃO
     document.getElementById('btn-terminar').addEventListener('click', () => {
-        alert('Botão "Terminar Produção" clicado!');
-        DadosProducao.horaFimProducao = new Date();
-        console.log("Hora Fim da Produção", DadosProducao.horaFimProducao);
+        console.log(terminar);
+        if (terminar === false) {
+        modeloDadosPreparacao.horaFim = new Date().toLocaleTimeString('pt-PT');
+        modeloDadosProducao.horaInicio = modeloDadosPreparacao.horaFim;
+        
+        // Calcula a duração da preparação
+        //modeloDadosProducao.tempoEstimado = formatarTempo(duracao_atual);
+        modeloDadosProducao.tempoEstimado = formatarTempo(3600000 * modeloDadosFabrico.totalaProduzir / modeloDadosFabrico.cadenciaTeorica);
+        duracao = false; // Para a contagem de duração
+        duracao_producao = true; // Inicia a contagem de duração da produção)
+        if (hora_inicio_producao === null){
+            hora_inicio_producao = new Date();
+        }
+        
+
+        // Atualiza os campos na dashboard  
+        document.getElementById('info_hora_fim').textContent = modeloDadosPreparacao.horaFim;
+        document.getElementById('btn-terminar').textContent = "TERMINAR PRODUÇÃO";
+        document.getElementById('info_hora_inicio_producao').textContent = modeloDadosPreparacao.horaFim;
+        document.getElementById('info_tempo_estimado_duracao_producao').textContent = modeloDadosProducao.tempoEstimado;
+        terminar = true;
+        console.log(terminar);
+        console.log("Entra no if se terminar == false");
+        }
+        else {
+            modeloDadosProducao.horaFim = new Date().toLocaleTimeString('pt-PT');
+            duracao_producao = false; // Para a contagem de duração da produção
+            document.getElementById('info_hora_fim_producao').textContent = modeloDadosProducao.horaFim;
+            modeloDadosProducao.duracao = formatarTempo(duracao_atual);
+            dadosParaEnviar = [{modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI}];
+            console.log("Dados Preparação:", JSON.stringify(dadosParaEnviar, null, 2));
+            console.log("Entra no if se terminar == true");
+        }
+        
     });
 
     btnIniciarProducao.addEventListener('click', () => {
