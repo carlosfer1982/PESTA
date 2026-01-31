@@ -189,15 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Atualizado Duração
     // Verifica se a variável dadosProducao.hora_inicial2 existe
-
-
-
-
-
     // Lógica dos botões do Modal Preparação
     // Lógica para o botão "Iniciar" do modal de Preparação
     btnIniciarPreparacao.addEventListener('click', () => {
-        alert('Iniciar botão Modal Preparação - Evento 1 - gestão do modal');
+        //alert('Iniciar botão Modal Preparação - Evento 1 - gestão do modal');
         modalIniciarPreparacao.style.display = 'none';
         actionButtonsModal.style.display = 'none';
         dashboardContent.style.display = 'flex';
@@ -210,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para o botão "Cancelar" do modal de Analisar Paragens
     btnAnalisarParagensCancelar.addEventListener('click', () => {
-        alert('Cancelar botão Modal Analisar Paragens');
+        //alert('Cancelar botão Modal Analisar Paragens');
         modalAnalisarParagens.style.display = 'none';
     });
 
@@ -248,14 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // bOTÃO SUSPENDER PRODUÇÃO - MODAL SUSPENDER
     btnIniciarSuspender.addEventListener('click', () => {
-        alert('Iniciar botão Modal Suspender - btn-iniciar-modal-suspender');
+        //alert('Iniciar botão Modal Suspender - btn-iniciar-modal-suspender');
         if (pausa == false) {
             pausa = true;
             modalIniciarProducao.style.display = 'none';
             actionButtonsModal.style.display = 'none';
             dashboardContent.style.display = 'flex';
-            actionButtonsDashboard.style.display = 'flex';  
+            actionButtonsDashboard.style.display = 'flex';
+            document.getElementById('btn-terminar').disabled = true;
+            btnAnalisarParagens.disabled = true;
             btnSuspender.textContent = "RETOMAR";
+            
             modeloParagem = 
             {
                 id: modeloParagem.id + 1,
@@ -272,7 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actionButtonsModal.style.display = 'none';
             dashboardContent.style.display = 'flex';
             actionButtonsDashboard.style.display = 'flex';
-            btnSuspender.textContent = "SUSPENDER PRODUÇÃO";
+            btnSuspender.textContent = "SUSPENDER PRODUÇÃO teste";
+            
 
         }
 
@@ -285,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionButtonsModal.style.display = 'none';
         dashboardContent.style.display = 'flex';
         actionButtonsDashboard.style.display = 'flex';
-        alert('Cancelar botão Modal Suspender');
+        //alert('Cancelar botão Modal Suspender');
     });
 
     // Lógica para o botão "Iniciar" do modal
@@ -389,8 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica dos botões de ação da dashboard
     // BOTÃO ANALISAR PARAGENS
     btnAnalisarParagens.addEventListener('click', () => {
-        alert('btn-analisar-paragens');
-        alert(JSON.stringify(paragemLista, null, 2)); // Mostra a lista de tempos no
+        //alert('btn-analisar-paragens');
+        //alert(JSON.stringify(paragemLista, null, 2)); // Mostra a lista de tempos no
         modalAnalisarParagens.style.display = 'flex';
         // Preenche a tabela com os dados da listaTempo2
         tabelaTemposParagem.innerHTML = ''; // Limpa a tabela antes de preencher
@@ -414,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // BOTÃO SUSPENDER
     btnSuspender.addEventListener('click', () => {
-        alert('Botão "Suspender Produção" clicado!   btn-suspender ');
+        //alert('Botão "Suspender Produção" clicado!   btn-suspender ');
         if(pausa == false) {
         modalIniciarProducao.style.display = 'flex';
         actionButtonsModal.style.display = 'none';
@@ -427,6 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
             //actionButtonsModal.style.display = 'none';
             //dashboardContent.style.display = 'flex';
             //actionButtonsDashboard.style.display = 'flex';
+            document.getElementById('btn-terminar').disabled = false;
+            btnAnalisarParagens.disabled = false;
             btnSuspender.textContent = "SUSPENDER";
             document.getElementById('paragem-tipo').value = "";
             document.getElementById('paragem-observacao').value = "";

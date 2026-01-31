@@ -146,6 +146,16 @@ body {
 .btn-danger { background-color: #dc3545; }
 
 
+/* Esta estilização é aplicada quando o botão fica desabilitado  */
+.btn:disabled {
+  filter: grayscale(100%);
+  opacity: 0.6;
+  pointer-events: none; /* Impede cliques adicionais */
+  cursor: not-allowed;
+}
+
+
+
 /* Estilos para o modal */
 .modal-overlay {
     position: fixed;
