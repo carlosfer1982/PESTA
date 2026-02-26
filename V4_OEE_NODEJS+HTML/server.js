@@ -76,7 +76,7 @@ async function run() {
 
 // Configuração da porta serial
 const serial = new SerialPort({
-  path: 'COM7',         //  Inserir neste path a porta correta onde o microcontrolador está conectado)
+  path: 'COM9',         //  Inserir neste path a porta correta onde o microcontrolador está conectado)
   baudRate: 38400    // Velocidade de comunicação (deve ser a mesma configurada no microcontrolador)
 });
 
