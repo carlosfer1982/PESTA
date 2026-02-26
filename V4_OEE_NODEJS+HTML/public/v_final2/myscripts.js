@@ -14,6 +14,17 @@ export class DadosProducao {
     }
 }
 
+export class DadosMicrocontrolador {
+    constructor() {
+        this.of = null;
+        this.setq = null;
+        this.cmd = null;
+    }
+}
+
+
+
+
 
 // Função para formatar o tempo em milissegundos para HH:MM:SS
 export function formatarTempo(ms) {
@@ -55,3 +66,61 @@ export function atualizarDuracao(hora_inicio) {
         elementoDataHora.textContent = dataHoraFormatada;
     }
 
+
+
+// Função para enviar dados para o Microcontrolador
+export function uC_EnviarDados(comando) {
+    
+}
+
+
+// Função para receber dados do microcontrolador
+export async function uC_ReceberDados() {
+
+    const url = '/api/micro/data';  // URL da rota no servidor que fornece os dados do microcontrolador
+
+    try {
+        console.log("A solicitar dados ao servidor...");
+
+        // 1. O 'await' pausa a execução aqui até que o servidor responda.
+        // O browser não "tranca", apenas esta função fica a aguardar.
+        const resposta = await fetch(url);
+
+        // 2. Verificamos se o servidor respondeu com sucesso (status 200-299)
+        if (!resposta.ok) {
+            // Se o servidor deu erro (ex: 404 ou 500), lançamos um erro para o 'catch'
+            throw new Error(`Erro no servidor: ${resposta.status}`);
+        }
+
+        // 3. O corpo da resposta também precisa de ser "aguardado" para converter em JSON
+        const receitas = await resposta.json();
+        if (!receitas || receitas.length === 0) {
+            console.warn("Servidor respondeu, mas não há dados de receitas disponíveis.");
+            return; // Sai da função se não houver dados
+        }   
+        // 4. Verifica se está a receber dados do microcontrolador 
+        if (receitas.of) { // Verifica se a propriedade 'of' existe no objeto recebido. 
+            console.log(`Receita OF: ${receitas.of}`);
+        } else {
+            // Caso não possui Ordem de Fabrico do uControlador, permite criar um novo registo.
+            //console.warn("A resposta do servidor não contém a propriedade 'of'.");
+        }
+
+        
+        // Exemplo: preencher dropdown de embalagens
+        // popularDropdownEmbalagem(receitas);
+
+    } catch (erro) {
+        // Se a internet falhar, ou o servidor estiver desligado, o código vem para aqui
+        console.error("Erro crítico na comunicação:", erro.message);
+        
+        // Aqui podias mostrar um aviso visual ao operador no computador da fábrica
+        // mostrarAvisoErro("Não foi possível ligar ao servidor de receitas.");
+    }
+}
+
+
+
+
+
+// Função para registar na base de dados os dados recebidos do microcontrolador

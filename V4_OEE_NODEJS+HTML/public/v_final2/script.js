@@ -1,5 +1,5 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
-import { calculaIntervalodeTempo, atualizarDataHora } from './myscripts.js';
+import { calculaIntervalodeTempo, atualizarDataHora, DadosMicrocontrolador, uC_ReceberDados } from './myscripts.js';
 import { DadosProducao,  teste} from './dadosproducao.js';
 import { paragem, dadosFabrico, dadosPreparacaoProducao, dadosOEE, dadosKPI } from './dadosproducao.js';
 
@@ -193,6 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica para o botão "Iniciar" do modal de Preparação
     btnIniciarPreparacao.addEventListener('click', () => {
         //alert('Iniciar botão Modal Preparação - Evento 1 - gestão do modal');
+        // Antes de iniciar a produção, verificar se o microcontrolador está com algum registo de trabalho
+
+        uC_ReceberDados(); // Chama a função para receber os dados do microcontrolador e aguarda a resposta
+        
+        
         modalIniciarPreparacao.style.display = 'none';
         actionButtonsModal.style.display = 'none';
         dashboardContent.style.display = 'flex';
