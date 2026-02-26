@@ -68,11 +68,33 @@ export function atualizarDuracao(hora_inicio) {
 
 
 
-// Função para enviar dados para o Microcontrolador
-export function uC_EnviarDados(comando) {
+// Função para enviar dados para a Base de Dados
+/*export async function gravar() {
+  const url = '/api/db/producao'; // URL da rota no servidor para gravar os dados
+  */
+export async function db_EnviarDados(payload) {
     
+        fetch('/api/db/producao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      console.log("Os dados foram enviados");
 }
 
+
+
+// Função para enviar dados para o microcontrolador
+
+export async function uC_EnviarDados(payload) {
+    
+    fetch('/api/micro/cmd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      console.log("Os dados foram enviados para o microcontrolador");
+}
 
 // Função para receber dados do microcontrolador
 export async function uC_ReceberDados() {
@@ -99,11 +121,11 @@ export async function uC_ReceberDados() {
             return; // Sai da função se não houver dados
         }   
         // 4. Verifica se está a receber dados do microcontrolador 
-        if (receitas.of) { // Verifica se a propriedade 'of' existe no objeto recebido. 
+        if (receitas.of !== "SEM_OF") { // Verifica se a propriedade 'of' existe no objeto recebido. 
             console.log(`Receita OF: ${receitas.of}`);
         } else {
             // Caso não possui Ordem de Fabrico do uControlador, permite criar um novo registo.
-            //console.warn("A resposta do servidor não contém a propriedade 'of'.");
+            console.warn("A resposta do servidor não contém a propriedade 'of'.");
         }
 
         

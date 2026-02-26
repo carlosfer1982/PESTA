@@ -1,5 +1,5 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
-import { calculaIntervalodeTempo, atualizarDataHora, DadosMicrocontrolador, uC_ReceberDados } from './myscripts.js';
+import { calculaIntervalodeTempo, atualizarDataHora, DadosMicrocontrolador, uC_ReceberDados, uC_EnviarDados, db_EnviarDados } from './myscripts.js';
 import { DadosProducao,  teste} from './dadosproducao.js';
 import { paragem, dadosFabrico, dadosPreparacaoProducao, dadosOEE, dadosKPI } from './dadosproducao.js';
 
@@ -196,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Antes de iniciar a produção, verificar se o microcontrolador está com algum registo de trabalho
 
         uC_ReceberDados(); // Chama a função para receber os dados do microcontrolador e aguarda a resposta
+        alert("A solicitar dados ao microcontrolador... Verifique o console para os dados recebidos.");
         
         
         modalIniciarPreparacao.style.display = 'none';
@@ -486,9 +487,11 @@ document.addEventListener('DOMContentLoaded', () => {
             duracao_producao = false; // Para a contagem de duração da produção
             document.getElementById('info_hora_fim_producao').textContent = modeloDadosProducao.horaFim;
             modeloDadosProducao.duracao = formatarTempo(duracao_atual);
-            dadosParaEnviar = [{modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI}];
+            dadosParaEnviar = {modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI, paragemLista};
             console.log("Dados Preparação:", JSON.stringify(dadosParaEnviar, null, 2));
+            db_EnviarDados(dadosParaEnviar);
             console.log("Entra no if se terminar == true");
+            
         }
         
     });

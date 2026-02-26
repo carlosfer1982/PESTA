@@ -99,7 +99,7 @@ parser.on('data', data => {
     console.log('Dado Recebido da base de dados:' );
 
   } catch (e) {
-    console.error('❌ Erro ao parsear JSON:', e); // Se o dado não for um JSON válido, exibe um erro no console
+    //console.error('❌ Erro ao parsear JSON:', e); // Se o dado não for um JSON válido, exibe um erro no console
   }
 });
 
@@ -169,5 +169,5 @@ app.post('/api/db/producao', async (req, res) => {
 // e exibe uma mensagem no console com o endereço do servidor
 app.listen(port, () => {
   //run();
-  console.log(`✅ Servidor rodando em: http://localhost:${port}`);
+  console.log(`✅ Servidor rodando em: http://localhost:${port}/v_final2/index.html`); // Exibe a URL para acessar o frontend
 });
