@@ -118,16 +118,23 @@ export async function uC_ReceberDados() {
         const receitas = await resposta.json();
         if (!receitas || receitas.length === 0) {
             console.warn("Servidor respondeu, mas não há dados de receitas disponíveis.");
-            return; // Sai da função se não houver dados
+            return null; // Sai da função se não houver dados
         }   
-        // 4. Verifica se está a receber dados do microcontrolador 
-        if (receitas.of !== "SEM_OF") { // Verifica se a propriedade 'of' existe no objeto recebido. 
-            console.log(`Receita OF: ${receitas.of}`);
-        } else {
-            // Caso não possui Ordem de Fabrico do uControlador, permite criar um novo registo.
-            console.warn("A resposta do servidor não contém a propriedade 'of'.");
+        else
+        {
+            //console.log(receitas);
+            //console.log('Função:', receitas);
+            return receitas;
         }
-
+        /*
+        // 4. Verifica se está a receber dados do microcontrolador 
+        //if (receitas.of !== "SEM_OF") { // Verifica se a propriedade 'of' existe no objeto recebido. 
+        //    console.log(`Receita OF: ${receitas.of}`);
+        //} else {
+            // Caso não possui Ordem de Fabrico do uControlador, permite criar um novo registo.
+        //    console.warn("A resposta do servidor não contém a propriedade 'of'.");
+        //}
+        */
         
         // Exemplo: preencher dropdown de embalagens
         // popularDropdownEmbalagem(receitas);
@@ -135,7 +142,7 @@ export async function uC_ReceberDados() {
     } catch (erro) {
         // Se a internet falhar, ou o servidor estiver desligado, o código vem para aqui
         console.error("Erro crítico na comunicação:", erro.message);
-        
+        return null;
         // Aqui podias mostrar um aviso visual ao operador no computador da fábrica
         // mostrarAvisoErro("Não foi possível ligar ao servidor de receitas.");
     }

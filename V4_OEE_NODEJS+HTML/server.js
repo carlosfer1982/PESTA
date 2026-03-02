@@ -170,4 +170,16 @@ app.post('/api/db/producao', async (req, res) => {
 app.listen(port, () => {
   //run();
   console.log(`✅ Servidor rodando em: http://localhost:${port}/v_final2/index.html`); // Exibe a URL para acessar o frontend
+  uC_EnviarDados({ cmd: 'start' }); // Envia um comando de teste para o microcontrolador quando o servidor inicia
 });
+
+
+async function uC_EnviarDados(payload) {
+    
+    fetch(`http://localhost:3000/api/micro/cmd`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      console.log("Os dados foram enviados para o microcontrolador");
+}

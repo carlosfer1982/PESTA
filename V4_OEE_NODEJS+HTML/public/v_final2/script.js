@@ -157,6 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabelaTemposParagem = document.getElementById('tabela-tempos-paragem');
 
 
+    // Elementos KPI
+    //const kpiUnidadesProduzidas = document.getElementById('btn-suspender').value;
+
+
     // Atualiza a data e hora a cada segundo
     //setInterval(atualizarDataHora, 1000);
     //atualizarDataHora();
@@ -195,9 +199,22 @@ document.addEventListener('DOMContentLoaded', () => {
         //alert('Iniciar botão Modal Preparação - Evento 1 - gestão do modal');
         // Antes de iniciar a produção, verificar se o microcontrolador está com algum registo de trabalho
 
-        uC_ReceberDados(); // Chama a função para receber os dados do microcontrolador e aguarda a resposta
+        
         alert("A solicitar dados ao microcontrolador... Verifique o console para os dados recebidos.");
         
+        //
+    setInterval(async() => {
+
+        // Atualizada Data e Hora exibida no cabeçalho
+        const dadosRecebidos = await uC_ReceberDados();
+    console.log('Script principal:\n', 'Entrada:', dadosRecebidos.entrada );
+        // Chama a função para receber os dados do microcontrolador e aguarda a resposta
+        document.getElementById('kpi-unidades-produzidas').innerHTML = "Entrada: "+`${dadosRecebidos.entrada}`+"<br>"+
+        "Saída: "+`${dadosRecebidos.saida}`+ "<br>"+"Desperdício:" + `${dadosRecebidos.desperdicio}`; // Exibe os dados recebidos no console  
+        document.getElementById('oee-qualidade').textContent = `${(1- (dadosRecebidos.desperdicio - dadosRecebidos.total))}`; // Exibe os dados recebidos no console
+
+    }, 1000);
+        //
         
         modalIniciarPreparacao.style.display = 'none';
         actionButtonsModal.style.display = 'none';
