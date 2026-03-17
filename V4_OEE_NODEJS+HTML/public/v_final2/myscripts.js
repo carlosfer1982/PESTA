@@ -1,3 +1,5 @@
+
+
 // ficheiro: myscripts.js
 export class DadosProducao {
     constructor() {
@@ -72,28 +74,45 @@ export function atualizarDuracao(hora_inicio) {
 /*export async function gravar() {
   const url = '/api/db/producao'; // URL da rota no servidor para gravar os dados
   */
-export async function db_EnviarDados(payload) {
-    
-        fetch('/api/db/producao', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      console.log("Os dados foram enviados");
+
+// Função para registar na base de dados os dados recebidos do microcontrolador
+// Esta função é chamada quando clicar em TERMINAR PRODUÇÃO, ou seja, quando a produção terminar e quiser guardar os dados na base de dados
+export async function db_EnviarDadosProducao(dadosProducao) {
+    const url = '/api/db/producao'; // URL da rota no servidor para gravar os dados da produção
+
+    try {
+        const resposta = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosProducao)
+        });
+
+        if (!resposta.ok) {
+            throw new Error(`Erro ao registrar produção: ${resposta.status}`);
+        }
+        alert("Produção registrada com sucesso!\n" + JSON.stringify(dadosProducao));
+        console.log("Produção registrada com sucesso!");
+    } catch (erro) {
+        alert("Erro ao registrar produção: " + erro.message);
+        console.error("Erro ao registrar produção:", erro.message);
+    }
 }
 
 
-
 // Função para enviar dados para o microcontrolador
-
 export async function uC_EnviarDados(payload) {
+   const resposta = await fetch("/api/micro/cmd", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const dados = await resposta.json();
+
+  console.log(dados);
     
-    fetch('/api/micro/cmd', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      console.log("Os dados foram enviados para o microcontrolador");
 }
 
 // Função para receber dados do microcontrolador
@@ -151,5 +170,3 @@ export async function uC_ReceberDados() {
 
 
 
-
-// Função para registar na base de dados os dados recebidos do microcontrolador

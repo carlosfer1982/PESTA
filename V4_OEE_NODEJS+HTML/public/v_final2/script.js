@@ -1,5 +1,5 @@
 import { atualizarDuracao, formatarTempo } from './myscripts.js';
-import { calculaIntervalodeTempo, atualizarDataHora, DadosMicrocontrolador, uC_ReceberDados, uC_EnviarDados, db_EnviarDados } from './myscripts.js';
+import { calculaIntervalodeTempo, atualizarDataHora, DadosMicrocontrolador, uC_ReceberDados, uC_EnviarDados, db_EnviarDadosProducao } from './myscripts.js';
 import { DadosProducao,  teste} from './dadosproducao.js';
 import { paragem, dadosFabrico, dadosPreparacaoProducao, dadosOEE, dadosKPI } from './dadosproducao.js';
 
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Antes de iniciar a produção, verificar se o microcontrolador está com algum registo de trabalho
 
         
-        alert("A solicitar dados ao microcontrolador... Verifique o console para os dados recebidos.");
+        //alert("A solicitar dados ao microcontrolador... Verifique o console para os dados recebidos.");
         
         //
     setInterval(async() => {
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }, 1000);
         //
-        
+        uC_EnviarDados({ cmd: 'start' }); // Envia um comando de start para o microcontrolador
         modalIniciarPreparacao.style.display = 'none';
         actionButtonsModal.style.display = 'none';
         dashboardContent.style.display = 'flex';
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica para o botão "Cancelar" do modal de Preparação
     btnCancelarPreparacao.addEventListener('click', () => {
-        alert('Cancelar botão Modal Preparação');
+        //alert('Cancelar botão Modal Preparação');
         modalIniciarPreparacao.style.display = 'none';
         modalAnalisarParagens.style.display = 'none';
 
@@ -371,7 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         };
         console.log(JSON.stringify(modeloDadosFabrico));
-
+        uC_EnviarDados({ cmd: 'start' }); // Envia um comando de start para o microcontrolador  
+        uC_EnviarDados({ OF: modeloDadosFabrico.ordemFabrico }); // Envia os dados de fabrico para o microcontrolador
+        uC_EnviarDados({ SETQ: Number(modeloDadosFabrico.totalaProduzir) }); // Envia os dados de fabrico para o microcontrolador
 
 
 
@@ -496,18 +498,31 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info_hora_inicio_producao').textContent = modeloDadosPreparacao.horaFim;
         document.getElementById('info_tempo_estimado_duracao_producao').textContent = modeloDadosProducao.tempoEstimado;
         terminar = true;
-        console.log(terminar);
-        console.log("Entra no if se terminar == false");
+        
+        
         }
         else {
+            // Confirmação para terminar a produção
+            var resposta = confirm("Deseja TERMINAR a produção e registar os dados?");
+            if (resposta == true) {
             modeloDadosProducao.horaFim = new Date().toLocaleTimeString('pt-PT');
             duracao_producao = false; // Para a contagem de duração da produção
             document.getElementById('info_hora_fim_producao').textContent = modeloDadosProducao.horaFim;
             modeloDadosProducao.duracao = formatarTempo(duracao_atual);
             dadosParaEnviar = {modeloDadosFabrico, modeloDadosPreparacao, modeloDadosProducao,modeloDadosOEE, modeloDadosKPI, paragemLista};
             console.log("Dados Preparação:", JSON.stringify(dadosParaEnviar, null, 2));
-            db_EnviarDados(dadosParaEnviar);
-            console.log("Entra no if se terminar == true");
+            db_EnviarDadosProducao(dadosParaEnviar);
+                        }
+            
+            // Reseta a aplicação para o estado inicial
+            setTimeout(() => {
+                location.reload();
+                uC_EnviarDados({ cmd: 'cancel' }); // Envia um comando de reset para o microcontrolador
+                uC_EnviarDados({ cmd: 'start' });
+            }, 2000);
+
+            
+            
             
         }
         

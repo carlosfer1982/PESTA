@@ -116,6 +116,7 @@ app.get('/api/micro/data', (req, res) => {
 
 // Rota para envio de comandos ao microcontrolador
 // O frontend pode fazer uma requisição POST para esta rota para enviar comandos
+/*
 app.post('/api/micro/cmd', (req, res) => {
   const comando = JSON.stringify(req.body); // Converte o corpo da requisição em uma string JSON (função síncrona)
   // Envia o comando para o microcontrolador pela porta serial
@@ -128,6 +129,47 @@ app.post('/api/micro/cmd', (req, res) => {
     res.json({ status: 'ok' }); // Retorna uma resposta de sucesso
   });
 });
+*/
+
+app.post('/api/micro/cmd', async (req, res) => {
+
+  const comando = JSON.stringify(req.body);
+  const maxTentativas = 3;
+
+  for (let i = 1; i <= maxTentativas; i++) {
+
+    try {
+
+      await new Promise((resolve, reject) => {
+
+        serial.write(comando + '\n', err => {
+          if (err) reject(err);
+          else resolve();
+        });
+
+      });
+
+      console.log("📤 Enviado:", comando);
+
+      return res.json({ status: "ok" });
+
+    } catch (err) {
+
+      console.log(`⚠️ Tentativa ${i} falhou`);
+
+      if (i === maxTentativas) {
+        return res.status(500).json({ error: "Falha ao enviar comando" });
+      }
+
+    }
+
+  }
+
+});
+
+
+
+
 // Observação: 
 // As duas rotas propostas acima são exemplos básicos. Poderiam ser tratadas como apenas uma rota com métodos GET e POST, 
 // mas optei por separar para maior clareza entre as funcionalidades de leitura e escrita.
