@@ -63,7 +63,9 @@ void reconnect() {
         clientId += String(random(0xffff), HEX); // Add a unique identifier to the client ID
         if (client.connect(clientId.c_str())) {
             Serial.println("connected");
-            client.subscribe("refrigerator/config");
+            client.subscribe("cin/ro-11/cmd");
+            client.subscribe("cin/ro-11/data");
+
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
