@@ -148,10 +148,9 @@ app.post('/api/micro/cmd', async (req, res) => {
         });
 
       });
-
+      
       console.log("📤 Enviado:", comando);
 
-      return res.json({ status: "ok" });
 
     } catch (err) {
 
