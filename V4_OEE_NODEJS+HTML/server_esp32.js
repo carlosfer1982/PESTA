@@ -8,7 +8,7 @@ const port = 3000;
 //const mqttClient = mqtt.connect({ host: 'test.mosquitto.org', port: 1883 });
 //const mqttClient = mqtt.connect({ host: '192.168.1.189', port: 1883 });
 //const mqttClient = mqtt.connect({ host: '10.200.0.225', port: 1883 });
-const mqttClient = mqtt.connect({ host: '172.20.10.3', port: 1883 });
+const mqttClient = mqtt.connect({ host: '192.168.1.208', port: 1883 });
 
 app.use(bodyParser.json()); //  analisa automaticamente o corpo das requisições HTTP
 //  que chegam no formato JSON, convertendo-o em um objeto JavaScript acessível via req.body. 
