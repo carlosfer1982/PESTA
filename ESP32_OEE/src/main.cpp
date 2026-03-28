@@ -12,7 +12,7 @@ const char* mqtt_server = "172.20.10.3";
 // /*
 const char* ssid = "NOS-6896";
 const char* password = "FTM9W4Q2";
-const char* mqtt_server = "192.168.1.208";
+const char* mqtt_server = "192.168.1.225";
 const char* topico_data = "cin/ro-11/data";
 const char* topico_cmd = "cin/ro-11/cmd";
 
@@ -54,19 +54,51 @@ void setup_wifi() {
     Serial.println(WiFi.localIP());
 }
 
+// Função de callback para mensagens MQTT recebidas
 void callback(char* topic, byte* message, unsigned int length) {
-    Serial.print("Message arrived [");
+    
+    
+    if (strcmp(topic, "cin/ro-11/cmd") == 0) {
+    char msg[50];
+    char payload[length + 1];
+   
+    Serial.print("A Mensagem chegou no tópico: [");
     Serial.print(topic);
     Serial.print("] ");
     
+    // Converter a mensagem recebida para uma string
+    for(unsigned int i = 0; i < length; i++) {
+        payload[i] = (char)message[i];
+    }
+    Serial.println(payload);
+
     
+    
+        memcpy(msg, payload, length);
+        msg[length] = '\0';
+
+        if (strcmp(msg, "START") == 0) {
+            //iniciar_producao();
+                Serial.println("RECEBIDO COMANDO: START");
+        }
+        else if (strcmp(msg, "PAUSE") == 0) {
+            //pausar_producao();
+            Serial.println("RECEBIDO COMANDO: PAUSE");  
+        }
+        else if (strcmp(msg, "CANCEL") == 0) {
+            //cancelar_producao();
+            Serial.println("RECEBIDO COMANDO: CANCEL");
+        }
+    }    
+    
+    /*
     String payload; // Cria uma string para armazenar a mensagem recebida
 
     for (unsigned int i = 0; i < length; i++) {
         payload += (char)message[i];
     }
     Serial.println(payload);
-
+    */
     /*
     if (String(topic) == "cin/ro-11/cmd") {
         // exemplo simples
@@ -92,7 +124,7 @@ void callback(char* topic, byte* message, unsigned int length) {
 }
 
 
-
+// Função de configuração
 void setup() {
     Serial.begin(115200);
     setup_wifi();
@@ -101,11 +133,11 @@ void setup() {
 
     // Configurar 2 portos de entrada com pull-up interno
     pinMode(0, INPUT_PULLUP); // Entrada
-    pinMode(35, INPUT_PULLUP); // Saída
+    pinMode(4, INPUT_PULLUP); // Saída
 
     button_entrada.attach(0);
     button_entrada.interval(debounceDelay); // Configura o tempo de debounce para 50 ms
-    button_saida.attach(35);
+    button_saida.attach(4);
     button_saida.interval(debounceDelay); // Configura o tempo de debounce para 50 ms
 
 
@@ -115,7 +147,7 @@ void setup() {
     delay(2000); // Aguarda um momento para indicar que o sistema está iniciando
 }
 
-
+// Função para reconectar ao MQTT caso a conexão seja perdida
 void reconnect() {
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection...");
@@ -144,47 +176,32 @@ void loop() {
     // Ler o estado dos sensores
     button_entrada.update();
     button_saida.update();
-
+    
+    //  Contagem de entrada com debounce não bloqueante
     if (button_entrada.fell()) {
         Serial.println("Sensor de entrada ativado");
         entrada++;
-        char buffer[256];
-        StaticJsonDocument<200> doc;
-        doc["entrada"] = entrada;
-        serializeJson(doc, buffer);
-        client.publish(topico_data, buffer);
-        //digitalWrite(2, HIGH); // Acende o LED para indicar atividade
     }
 
+    // Contagem de saída com debounce não bloqueante
     if (button_saida.fell()) {
         Serial.println("Sensor de saída ativado");
         saida++;
-
         //digitalWrite(2, HIGH); // Acende o LED para indicar atividade
     }
-    
-    if (button_saida.fell()) {
-        Serial.println("Sensor de saída ativado");
-        saida++;        
-        }
-        
+ 
+    // Envio de mensagem a cada 1 segundo
+    static unsigned long lastMsgTime = 0;
+    if (millis() - lastMsgTime > 1000) {
+        lastMsgTime = millis();
+        char buffer[256];
+        StaticJsonDocument<200> doc;
+        doc["entrada"] = entrada;
+        doc["saida"] = saida;
+        doc["desperdicio"] = entrada - saida; // Calcula o desperdício
+        serializeJson(doc, buffer);
+        client.publish(topico_data, buffer);
+    }
 
 
-
-
-
-    // Publish temperature data
-    /*
-    StaticJsonDocument<200> doc;
-    doc["temperature"] = random(20, 30);
-    char buffer[256];
-    serializeJson(doc, buffer);
-    client.publish(topico_data, buffer);
-    */
-    //char buffer[256];
-    //StaticJsonDocument<200> doc;
-    //doc["entrada"] = entrada;
-    //serializeJson(doc, buffer);
-    //client.publish(topico_data, buffer);
-    //delay(2000);
 }
