@@ -5,10 +5,10 @@ const path = require('path'); // Módulo para lidar com caminhos de arquivos e d
 
 const app = express(); // Cria uma instância do Express - Servidor API
 const port = 3000; 
-//const mqttClient = mqtt.connect({ host: 'test.mosquitto.org', port: 1883 });
+const mqttClient = mqtt.connect({ host: 'test.mosquitto.org', port: 1883 });
 //const mqttClient = mqtt.connect({ host: '192.168.1.189', port: 1883 });
 //const mqttClient = mqtt.connect({ host: '10.200.0.225', port: 1883 });
-const mqttClient = mqtt.connect({ host: '192.168.1.225', port: 1883 });
+//const mqttClient = mqtt.connect({ host: '192.168.1.225', port: 1883 });
 
 app.use(bodyParser.json()); //  analisa automaticamente o corpo das requisições HTTP
 //  que chegam no formato JSON, convertendo-o em um objeto JavaScript acessível via req.body. 

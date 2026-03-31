@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include <ArduinoJson.h>
+#include <ArduinoJson.h> // https://arduinojson.org/v7/tutorial/deserialization/
 #include <bounce2.h>
 
  /*
@@ -10,11 +10,38 @@ const char* mqtt_server = "172.20.10.3";
  */
 
 // /*
-const char* ssid = "NOS-6896";
-const char* password = "FTM9W4Q2";
-const char* mqtt_server = "192.168.1.225";
+
+// Servidor MQTT
+//const char* mqtt_server = "192.168.1.225";
+const char* mqtt_server = "test.mosquitto.org";
+
+
+// Rede Wi-fi
+// CIN - Rede 1 - usar a biblioteca "esp_wpa2.h"
+// const char* ssid = "CIN";
+// const char* password = "FTM9W4Q2";
+
+// Casa - Rede 2
+//const char* ssid = "NOS-6896";
+//const char* password = "FTM9W4Q2";
+
+//Telemovel - Rede 3
+const char* ssid = "iPhone";
+const char* password = "carlon12";
+
+
+// Topicos MQTT
 const char* topico_data = "cin/ro-11/data";
 const char* topico_cmd = "cin/ro-11/cmd";
+
+
+// Criando um objeto JasonDocument para armazenar os dados a serem enviados
+JsonDocument doc2;
+
+
+
+
+
 
 
     // contagem de sensorEntrada com debouce não bloqueante
@@ -31,6 +58,7 @@ int saida = 0;
 int desperdicio = 0;
 
 // */
+JsonObject object;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -131,6 +159,20 @@ void setup() {
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
 
+    // Teste de envio de mensagem de um objeto JSON
+    // Criando um objeto
+    object = doc2.to<JsonObject>();
+    object["entrada"] = 0;
+    object["saida"] = 0;
+    object["desperdicio"] = 0;
+    object["of"] = 0;
+    object["setq"] = 0;
+    object["cmd"] = "";
+
+    Serial.println();
+    serializeJson(doc2, Serial);
+    Serial.println();
+
     // Configurar 2 portos de entrada com pull-up interno
     pinMode(0, INPUT_PULLUP); // Entrada
     pinMode(4, INPUT_PULLUP); // Saída
@@ -181,12 +223,14 @@ void loop() {
     if (button_entrada.fell()) {
         Serial.println("Sensor de entrada ativado");
         entrada++;
+        object["entrada"] = entrada;    // Atualiza o valor de entrada no objeto JSON
     }
 
     // Contagem de saída com debounce não bloqueante
     if (button_saida.fell()) {
         Serial.println("Sensor de saída ativado");
         saida++;
+        object["saida"] = saida;    // Atualiza o valor de saída no objeto JSON
         //digitalWrite(2, HIGH); // Acende o LED para indicar atividade
     }
  
@@ -195,11 +239,9 @@ void loop() {
     if (millis() - lastMsgTime > 1000) {
         lastMsgTime = millis();
         char buffer[256];
-        StaticJsonDocument<200> doc;
-        doc["entrada"] = entrada;
-        doc["saida"] = saida;
-        doc["desperdicio"] = entrada - saida; // Calcula o desperdício
-        serializeJson(doc, buffer);
+        object["desperdicio"] = entrada - saida; // Calcula o desperdício
+        serializeJson(doc2, Serial); // Imprime o JSON no monitor serial para verificação
+        serializeJson(doc2, buffer);
         client.publish(topico_data, buffer);
     }
 
