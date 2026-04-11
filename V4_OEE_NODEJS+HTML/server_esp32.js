@@ -72,7 +72,7 @@ mqttClient.on('message', (topic, message) => {
 
 // Function to publish hardcoded data
 function publishHardcodedData(topic,hardcodedData) {
-    
+    console.log('Publicando dados no tópico', topic, ':', JSON.stringify(hardcodedData));
     mqttClient.publish(topic, JSON.stringify(hardcodedData), (err) => {
         if (err) {
             console.error('Failed to publish hardcoded data', err);
@@ -111,9 +111,9 @@ app.post('/api/micro/cmd', (req, res) => {
 
  console.log("📤 Dado recebido pelo frontend na api: api/micro/cmd: ", req.body);
 
-if (topico &&cmd && OF && SETQ) {
+if (cmd && OF && SETQ) { // Tenho que adicionar o topico posteriormente
   publishHardcodedData(topico, { cmd, OF, SETQ }); // Publica os dados no tópico 'cin/ro-11/cmd' do MQTT
-  //console.log("Dados publicados no MQTT:", { cmd, OF, SETQ });
+  console.log("Dados publicados no MQTT:", topico, { cmd, OF, SETQ });
 } else {
   console.error("Dados incompletos. Certifique-se de enviar cmd, OF e SETQ.");
   return res.status(400).json({ error: "Dados incompletos. Envie cmd, OF e SETQ." }); // Retorna um erro 400 se os dados estiverem incompletos

@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         modeloDadosFabrico = {
-            equipamento: equipamento || "RO-11",
+            equipamento: equipamento,
             estado: "Em produção",
             totalaProduzir: quantidadeProducao || "25",
             ordemFabrico: ordemProducao || "OF2025-1000",
@@ -371,9 +371,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         };
         console.log(JSON.stringify(modeloDadosFabrico));
-        uC_EnviarDados({ cmd: 'start' }); // Envia um comando de start para o microcontrolador  
-        uC_EnviarDados({ OF: modeloDadosFabrico.ordemFabrico }); // Envia os dados de fabrico para o microcontrolador
-        uC_EnviarDados({ SETQ: Number(modeloDadosFabrico.totalaProduzir) }); // Envia os dados de fabrico para o microcontrolador
+        const topico = `cin/${modeloDadosFabrico.equipamento}/cmd`; // Define o tópico para onde os dados serão publicados (pode ser dinâmico se necessário)
+        //console.log("Tópico para envio dos dados ao microcontrolador:", topico);
+        uC_EnviarDados({topico: topico, cmd: 'START', OF: modeloDadosFabrico.ordemFabrico, SETQ: Number(modeloDadosFabrico.totalaProduzir) }); // Envia um comando de start para o microcontrolador
+        //uC_EnviarDados({ OF: modeloDadosFabrico.ordemFabrico }); // Envia os dados de fabrico para o microcontrolador
+        //uC_EnviarDados({ SETQ: Number(modeloDadosFabrico.totalaProduzir) }); // Envia os dados de fabrico para o microcontrolador
 
 
 
@@ -517,8 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reseta a aplicação para o estado inicial
             setTimeout(() => {
                 location.reload();
-                uC_EnviarDados({ cmd: 'cancel' }); // Envia um comando de reset para o microcontrolador
-                uC_EnviarDados({ cmd: 'start' });
+                uC_EnviarDados({ cmd: 'CANCEL' }); // Envia um comando de reset para o microcontrolador
+                uC_EnviarDados({ cmd: 'START' });
             }, 2000);
 
             

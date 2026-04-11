@@ -22,21 +22,23 @@ const char* mqtt_server = "test.mosquitto.org";
 // const char* password = "FTM9W4Q2";
 
 // Casa - Rede 2
-//const char* ssid = "NOS-6896";
-//const char* password = "FTM9W4Q2";
+const char* ssid = "NOS-6896";
+const char* password = "FTM9W4Q2";
 
 //Telemovel - Rede 3
-const char* ssid = "iPhone";
-const char* password = "carlon12";
+//const char* ssid = "iPhone";
+//const char* password = "carlon12";
 
 
 // Topicos MQTT
 const char* topico_data = "cin/ro-11/data";
 const char* topico_cmd = "cin/ro-11/cmd";
 
+int interval = 1000; // Intervalo de envio de dados em milissegundos
 
 // Criando um objeto JasonDocument para armazenar os dados a serem enviados
 JsonDocument doc2;
+
 
 
 
@@ -57,11 +59,29 @@ int entrada = 0;
 int saida = 0;
 int desperdicio = 0;
 
-// */
+// Criação do objeto JSON para armazenar os dados a serem enviados
 JsonObject object;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+
+void calculaDesperdicio(int entrada, int saida) {
+    object["desperdicio"] = entrada - saida; // Calcula o desperdício
+}  
+
+void enviaStatus(int interval) {
+    static unsigned long lastMsgTime = 0;
+    if (millis() - lastMsgTime > interval) {
+        lastMsgTime = millis();
+
+            char buffer[256];
+            serializeJson(doc2, Serial); // Imprime o JSON no monitor serial para verificação
+            Serial.println();               // Pula uma linha para melhor leitura no monitor serial            
+            serializeJson(doc2, buffer);    // Serializa o objeto JSON para o buffer
+            client.publish(topico_data, buffer); // Publica a mensagem no tópico MQTT
+            
+    }
+}
 
 void setup_wifi() {
     delay(10);
@@ -94,6 +114,25 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.print(topic);
     Serial.print("] ");
     
+// Deserialização da mensagem recebida para um objeto JSON
+    DeserializationError error = deserializeJson(doc2, message, length); // Deserializa a mensagem recebida para o objeto JSON doc2
+    // Verifica Erros
+    if (error) {    // Verifica se houve erro na deserialização
+        Serial.print("Falha na deserialização da mensagem: ");
+        Serial.println(error.c_str());
+        return;
+    }
+
+
+    }
+
+    // Extract values from the JSON object
+    //char *cmd = object["cmd"]; // Extrai o valor do campo "cmd" do objeto JSON
+    //int setq = object["setq"]; // Extrai o valor do campo "setq" do objeto JSON
+    //char *of = object["of"];   // Extrai o valor do campo "of" do objeto JSON
+
+
+    /*
     // Converter a mensagem recebida para uma string
     for(unsigned int i = 0; i < length; i++) {
         payload[i] = (char)message[i];
@@ -101,54 +140,29 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.println(payload);
 
     
-    
+    //  Verificação do CMD recebido e atualização do objeto JSON
         memcpy(msg, payload, length);
         msg[length] = '\0';
 
         if (strcmp(msg, "START") == 0) {
             //iniciar_producao();
                 Serial.println("RECEBIDO COMANDO: START");
+                object["cmd"] = "START"; // Atualiza o comando no objeto JSON
+                
         }
         else if (strcmp(msg, "PAUSE") == 0) {
             //pausar_producao();
-            Serial.println("RECEBIDO COMANDO: PAUSE");  
+            Serial.println("RECEBIDO COMANDO: PAUSE"); 
+            object["cmd"] = "PAUSE"; // Atualiza o comando no objeto JSON    
         }
         else if (strcmp(msg, "CANCEL") == 0) {
             //cancelar_producao();
             Serial.println("RECEBIDO COMANDO: CANCEL");
+            object["cmd"] = "CANCEL"; // Atualiza o comando no objeto JSON
         }
     }    
-    
-    /*
-    String payload; // Cria uma string para armazenar a mensagem recebida
-
-    for (unsigned int i = 0; i < length; i++) {
-        payload += (char)message[i];
-    }
-    Serial.println(payload);
     */
-    /*
-    if (String(topic) == "cin/ro-11/cmd") {
-        // exemplo simples
-        if (payload == "LED_ON") {
-            digitalWrite(2, HIGH);
-            Serial.println("LED ligado");
-        } else if (payload == "LED_OFF") {
-            digitalWrite(2, LOW);
-            Serial.println("LED desligado");
-        } else if (payload == "STATUS") {
-            StaticJsonDocument<200> resp;
-            resp["entrada"] = entrada;
-            resp["saida"] = saida;
-            resp["desperdicio"] = desperdicio;
-            char buf[256];
-            serializeJson(resp, buf);
-            client.publish("cin/ro-11/data", buf);
-            Serial.println("Status enviado");
-        } else {
-            Serial.println("Comando desconhecido em cin/ro-11/cmd");
-        }
-        */
+
 }
 
 
@@ -209,6 +223,8 @@ void reconnect() {
     }
 }
 
+
+// Função de loop principal
 void loop() {
     if (!client.connected()) {
         reconnect();
@@ -224,6 +240,7 @@ void loop() {
         Serial.println("Sensor de entrada ativado");
         entrada++;
         object["entrada"] = entrada;    // Atualiza o valor de entrada no objeto JSON
+        calculaDesperdicio(entrada, saida); // Atualiza o valor de desperdício no objeto JSON
     }
 
     // Contagem de saída com debounce não bloqueante
@@ -231,19 +248,30 @@ void loop() {
         Serial.println("Sensor de saída ativado");
         saida++;
         object["saida"] = saida;    // Atualiza o valor de saída no objeto JSON
-        //digitalWrite(2, HIGH); // Acende o LED para indicar atividade
+        calculaDesperdicio(entrada, saida); // Atualiza o valor de desperdício no objeto JSON
+        
     }
  
-    // Envio de mensagem a cada 1 segundo
-    static unsigned long lastMsgTime = 0;
-    if (millis() - lastMsgTime > 1000) {
-        lastMsgTime = millis();
-        char buffer[256];
-        object["desperdicio"] = entrada - saida; // Calcula o desperdício
-        serializeJson(doc2, Serial); // Imprime o JSON no monitor serial para verificação
-        serializeJson(doc2, buffer);
-        client.publish(topico_data, buffer);
+    
+    
+    if (  (strcmp(object["cmd"], "START") == 0))
+             {
+        enviaStatus(interval);
     }
+    else if (strcmp(object["cmd"], "PAUSE") == 0) {
+        // Pausa o envio de mensagens, mantendo o sistema atualizado localmente
+    }
+    else if (strcmp(object["cmd"], "CANCEL") == 0) {
+        // Cancela a produção, reseta os contadores e envia o status atualizado
+        entrada = 0;
+        saida = 0;
+        desperdicio = 0;
+        object["entrada"] = entrada;
+        object["saida"] = saida;
+        object["desperdicio"] = desperdicio;
+    }
+    // Envio de mensagem a cada 1 segundo
+   
 
-
+    
 }
