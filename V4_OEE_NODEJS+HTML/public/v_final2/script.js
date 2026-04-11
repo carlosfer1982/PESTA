@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 location.reload();
                 uC_EnviarDados({ cmd: 'CANCEL' }); // Envia um comando de reset para o microcontrolador
-                uC_EnviarDados({ cmd: 'START' });
+                //uC_EnviarDados({ cmd: 'START' });
             }, 2000);
 
             
