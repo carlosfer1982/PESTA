@@ -3,7 +3,15 @@
 #include <ArduinoJson.h> // https://arduinojson.org/v7/tutorial/deserialization/
 #include <bounce2.h>
 
- /*
+
+                        // https://docs.arduino.cc/libraries/wifimanager/
+                        // https://github.com/tzapu/wifimanager#how-it-works
+                        // https://www.mongodb.com/pt-br/docs/manual/crud/
+
+
+ 
+ 
+                        /*
 const char* ssid = "iPhone";
 const char* password = "carlon12";
 const char* mqtt_server = "172.20.10.3";
