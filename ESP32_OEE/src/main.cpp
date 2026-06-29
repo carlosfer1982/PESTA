@@ -30,12 +30,16 @@ const char* mqtt_server = "test.mosquitto.org";
 // const char* password = "FTM9W4Q2";
 
 // Casa - Rede 2
-const char* ssid = "NOS-6896";
-const char* password = "FTM9W4Q2";
+//const char* ssid = "NOS-6896";
+//const char* password = "FTM9W4Q2";
 
 //Telemovel - Rede 3
 //const char* ssid = "iPhone";
 //const char* password = "carlon12";
+
+//Telemovel - Rede 4
+const char* ssid = "IS930-carlos";
+const char* password = "carlon12";
 
 
 // Topicos MQTT

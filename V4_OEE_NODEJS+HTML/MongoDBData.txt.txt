@@ -1,0 +1,10 @@
+VSCODE:
+mongodb+srv://<db_username>:<db_password>@oee.htpsx3z.mongodb.net/
+
+
+mongodb+srv://carlosfernandof1_db_user:Z29zYEq4zNMkOMXu@oee.htpsx3z.mongodb.net/
+carlosfernandof1_db_user
+Z29zYEq4zNMkOMXu
+
+carlosfernandof1_db_user2
+alUQfL4JD2C3bb4J

@@ -17,12 +17,23 @@ app.use(bodyParser.json()); //  analisa automaticamente o corpo das requisiçõe
 // Configurações da base de dados
 // Configurações para base de dados MongoDB
 // URL do servidor local (padrão porta 27017)
+//const { MongoClient } = require("mongodb"); // Importa o cliente MongoDB para conectar ao banco de dados
+//const mongoose = require('mongoose'); // Importa o Mongoose para modelar os dados (não utilizado neste exemplo)
+//const baseDados = 'meuBanco'; // Nome do banco de dados que será utilizado
+//const colecao = 'meusDados'; // Nome da coleção que será utilizada (não utilizado neste exemplo)
+//const url = "mongodb://localhost:27017"; // URL de conexão com o MongoDB (padrão localhost na porta 27017)
+//const client = new MongoClient(url); //
+
+
+// Servidor na Nuvem
 const { MongoClient } = require("mongodb"); // Importa o cliente MongoDB para conectar ao banco de dados
 const mongoose = require('mongoose'); // Importa o Mongoose para modelar os dados (não utilizado neste exemplo)
 const baseDados = 'meuBanco'; // Nome do banco de dados que será utilizado
 const colecao = 'meusDados'; // Nome da coleção que será utilizada (não utilizado neste exemplo)
-const url = "mongodb://localhost:27017"; // URL de conexão com o MongoDB (padrão localhost na porta 27017)
+const url = "mongodb+srv://carlosfernandof1_db_user:Z29zYEq4zNMkOMXu@oee.htpsx3z.mongodb.net/?appName=OEE"; // URL de conexão com o MongoDB (padrão localhost na porta 27017)
 const client = new MongoClient(url); //
+
+
 
 let horaInicio = null; // Variável para armazenar o horário de início do processo
 let lastData = {}; // cria uma variável vazia para armazenar o último dado recebido do microcontrolador
