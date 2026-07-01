@@ -7,6 +7,7 @@
                         // https://docs.arduino.cc/libraries/wifimanager/
                         // https://github.com/tzapu/wifimanager#how-it-works
                         // https://www.mongodb.com/pt-br/docs/manual/crud/
+                        // https://cloud.mongodb.com/v2/69a09eb39be65a9744fd7702#/explorer/69a09f6b78b72a1037369573/meuBanco/producao/find
 
 
  
@@ -30,16 +31,16 @@ const char* mqtt_server = "test.mosquitto.org";
 // const char* password = "FTM9W4Q2";
 
 // Casa - Rede 2
-//const char* ssid = "NOS-6896";
-//const char* password = "FTM9W4Q2";
+const char* ssid = "NOS-6896";
+const char* password = "FTM9W4Q2";
 
 //Telemovel - Rede 3
 //const char* ssid = "iPhone";
 //const char* password = "carlon12";
 
 //Telemovel - Rede 4
-const char* ssid = "IS930-carlos";
-const char* password = "carlon12";
+//const char* ssid = "IS930-carlos";
+//const char* password = "carlon12";
 
 
 // Topicos MQTT
@@ -48,13 +49,98 @@ const char* topico_cmd = "cin/ro-11/cmd";
 
 int interval = 1000; // Intervalo de envio de dados em milissegundos
 
+// Classe para gerenciar dados
+class esp32 {
+private:    
+    String esp32_id;
+    String mqtt_server;
+    String topico_data;
+    String topico_cmd;
+    String status;
+    String cmd;
+    int setq;
+    String of;
+    int entrada;
+    int saida;
+    int desperdicio;
+
+public:
+    esp32(String id, String mqtt_server, String topico_data, String topico_cmd) {
+        this->esp32_id = id;
+        this->mqtt_server = mqtt_server;
+        this->topico_data = topico_data;
+        this->topico_cmd = topico_cmd;
+        this->status = "desconectado";
+        this->cmd = "";
+        this->setq = 0;
+        this->of = "";
+        this->entrada = 0;
+        this->saida = 0;
+        this->desperdicio = 0;
+    }
+
+    void setStatus(String status) {
+        this->status = status;
+    }
+
+    void setCmd(String cmd) {
+        this->cmd = cmd;
+    }
+
+    void setSetq(int setq) {
+        this->setq = setq;
+    }
+
+    void setOf(String of) {
+        this->of = of;
+    }
+
+    void setEntrada(int entrada) {
+        this->entrada = entrada;
+    }
+
+    void setSaida(int saida) {
+        this->saida = saida;
+    }
+
+    void setDesperdicio(int desperdicio) {
+        this->desperdicio = desperdicio;
+    }
+
+    void toJson(JsonDocument& doc) {
+        JsonObject object = doc.to<JsonObject>();
+        object["esp32_id"] = "ro-11";
+        object["mqtt_server"] = mqtt_server;
+        object["topico_data"] = topico_data;
+        object["topico_cmd"] = topico_cmd;
+        object["status"] = status;
+        object["cmd"] = cmd;
+        object["setq"] = setq;
+        object["of"] = of;
+        object["entrada"] = entrada;
+        object["saida"] = saida;
+        object["desperdicio"] = desperdicio;
+    }
+
+    void reset() {
+        this->status = "desconectado";
+        this->cmd = "";
+        this->setq = 0;
+        this->of = "";
+        this->entrada = 0;
+        this->saida = 0;
+        this->desperdicio = 0;
+    }
+
+
+};
+
+esp32 esp32_obj("ro-11", "test.mosquitto.org", "cin/ro-11/data", "cin/ro-11/cmd");
+
+
 // Criando um objeto JasonDocument para armazenar os dados a serem enviados
 JsonDocument doc2;
-
-
-
-
-
+JsonDocument esp32_doc;
 
 
 
@@ -72,7 +158,7 @@ int saida = 0;
 int desperdicio = 0;
 
 // Criação do objeto JSON para armazenar os dados a serem enviados
-JsonObject object;
+JsonObject object = doc2.to<JsonObject>();
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -86,12 +172,19 @@ void enviaStatus(int interval) {
     if (millis() - lastMsgTime > interval) {
         lastMsgTime = millis();
 
+            //char buffer[256];
+            //serializeJson(doc2, Serial); // Imprime o JSON no monitor serial para verificação
+            //Serial.println();               // Pula uma linha para melhor leitura no monitor serial            
+            //serializeJson(doc2, buffer);    // Serializa o objeto JSON para o buffer
+            //client.publish(topico_data, buffer); // Publica a mensagem no tópico MQTT
+            esp32_obj.toJson(esp32_doc); // Serializa o objeto esp32_obj para o objeto JSON esp32_doc
+
             char buffer[256];
-            serializeJson(doc2, Serial); // Imprime o JSON no monitor serial para verificação
-            Serial.println();               // Pula uma linha para melhor leitura no monitor serial            
-            serializeJson(doc2, buffer);    // Serializa o objeto JSON para o buffer
+            serializeJson(esp32_doc, Serial); // Imprime o JSON no monitor serial para verificação
+            Serial.println();               // Pula uma linha para melhor leitura no monitor serial
+            serializeJson(esp32_doc, buffer);    // Serializa o objeto JSON para o buffer
             client.publish(topico_data, buffer); // Publica a mensagem no tópico MQTT
-            
+
     }
 }
 
@@ -185,9 +278,28 @@ void setup() {
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
 
+    esp32_obj.setStatus("contectado ");
+    esp32_obj.setCmd("START");
+    esp32_obj.setSetq(1);
+    esp32_obj.setOf("OF-001");
+
+    esp32_obj.toJson(esp32_doc); // Serializa o objeto esp32_obj para o objeto JSON esp32_doc
+    serializeJson(esp32_doc, Serial); // Imprime o objeto JSON esp32_doc no monitor serial para verificação
+    
+    Serial.println();
+    Serial.println("Iniciando o sistema...");
+    Serial.println();
+    
+    serializeJson(esp32_doc, Serial);
+    Serial.println();
+
+
+
+
+
     // Teste de envio de mensagem de um objeto JSON
     // Criando um objeto
-    object = doc2.to<JsonObject>();
+    //object = doc2.to<JsonObject>();
     object["entrada"] = 0;
     object["saida"] = 0;
     object["desperdicio"] = 0;
@@ -237,28 +349,34 @@ void reconnect() {
 
 
 // Função de loop principal
-void loop() {
+void loop() {  
     if (!client.connected()) {
         reconnect();
     }
     client.loop();
+
 
     // Ler o estado dos sensores
     button_entrada.update();
     button_saida.update();
     
     //  Contagem de entrada com debounce não bloqueante
-    if (button_entrada.fell()) {
-        Serial.println("Sensor de entrada ativado");
+    if (button_entrada.fell()) { 
         entrada++;
+        Serial.printf("Sensor de entrada ativado %d \n", entrada);
+        esp32_obj.setEntrada(entrada); // Atualiza o valor de entrada no objeto esp32_obj
+        
         object["entrada"] = entrada;    // Atualiza o valor de entrada no objeto JSON
         calculaDesperdicio(entrada, saida); // Atualiza o valor de desperdício no objeto JSON
+       
     }
 
     // Contagem de saída com debounce não bloqueante
     if (button_saida.fell()) {
-        Serial.println("Sensor de saída ativado");
         saida++;
+        Serial.printf("Contagem de saída: %d \n", saida);
+        esp32_obj.setSaida(saida); // Atualiza o valor de saída no objeto esp32_obj 
+
         object["saida"] = saida;    // Atualiza o valor de saída no objeto JSON
         calculaDesperdicio(entrada, saida); // Atualiza o valor de desperdício no objeto JSON
         
@@ -281,6 +399,8 @@ void loop() {
         object["entrada"] = entrada;
         object["saida"] = saida;
         object["desperdicio"] = desperdicio;
+        esp32_obj.reset(); // Reseta o objeto esp32_obj
+        Serial.println("Status atualizado após o reset");
     }
     // Envio de mensagem a cada 1 segundo
    
